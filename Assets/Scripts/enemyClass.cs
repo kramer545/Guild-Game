@@ -12,6 +12,6 @@ public class enemyClass : baseClass {
 
 	public void action()//default to attack highest threat party member
 	{
-		(manager.highestThreat ()).attacked (this);enemy
+		(manager.highestThreat ()).attacked (this);
 	}
 }

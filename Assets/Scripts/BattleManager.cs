@@ -238,15 +238,15 @@ public class BattleManager : MonoBehaviour  {
 
 	public void removeUnit(baseClass unit)//remove unit from turn order, likely from death
 	{
-		Queue <baseClass> tempOrder;
+		Queue <baseClass> tempOrder = new Queue<baseClass>();
 		while (turnOrder.Count > 0)//move turnOrder to temp, removing unit if found
 		{
-			baseClass tempUnit = turnOrder.Dequeue;
+			baseClass tempUnit = turnOrder.Dequeue();
 			if (tempUnit != unit)
 				tempOrder.Enqueue (tempUnit);
 		}
 		while (tempOrder.Count > 0)//move temp back to turnOrder, without unit if it was in there
-			turnOrder.Enqueue (tempOrder.Dequeue);
+			turnOrder.Enqueue (tempOrder.Dequeue());
 		if (turnOrder.Count < 8)//increment turn order up to at least 8
 			makeTurnOrder ();
 		Debug.Log (unit.name + " is dead");
@@ -255,8 +255,8 @@ public class BattleManager : MonoBehaviour  {
 
 	public baseClass highestThreat()
 	{
-		baseClass max = party [0];
-		foreach (baseClass x in party)
+		allyClass max = (allyClass)party [0];
+		foreach (allyClass x in party)
 		{
 			if (x.threat > max.threat)
 				max = x;
@@ -267,12 +267,12 @@ public class BattleManager : MonoBehaviour  {
 	public bool allyHealthCheck(baseClass healer,bool ally,int healPercent)
 	{
 		baseClass lowest = null;
-		int heal = healer.stats [7] * healer.HEAL_MULTIPLIER;
+		int heal = (int)(healer.stats [7] * baseClass.HEAL_MULTIPLIER);
 		if(ally)//player party
 		{
 			foreach(baseClass x in party)
 			{
-				if((x.stats[2] <= x.maxHP - heal) || ((((x.stats[2]/(x.maxHP))*100) < healPercent)))
+				if((x.stats[2] <= x.maxHp - heal) || ((((x.stats[2]/(x.maxHp))*100) < healPercent)))
 				{
 					if (lowest == null)
 						lowest = x;
@@ -285,8 +285,8 @@ public class BattleManager : MonoBehaviour  {
 			}
 			if (lowest != null) {
 				lowest.stats [2] += heal;
-				if (lowest.stats [2] > lowest.maxHP)
-					lowest.stats [2] = maxHP;
+				if (lowest.stats [2] > lowest.maxHp)
+					lowest.stats [2] = lowest.maxHp;
 				return true;
 			} else
 				return false;
@@ -295,7 +295,7 @@ public class BattleManager : MonoBehaviour  {
 		{
 			foreach(baseClass x in enemys)
 			{
-				if((x.stats[2] <= x.maxHP - heal) || ((((x.stats[2]/(x.maxHP))*100) < healPercent)))
+				if((x.stats[2] <= x.maxHp - heal) || ((((x.stats[2]/(x.maxHp))*100) < healPercent)))
 				{
 					if (lowest == null)
 						lowest = x;
@@ -310,8 +310,8 @@ public class BattleManager : MonoBehaviour  {
 			}
 			if (lowest != null) {
 				lowest.stats [2] += heal;
-				if (lowest.stats [2] > lowest.maxHP)
-					lowest.stats [2] = maxHP;
+				if (lowest.stats [2] > lowest.maxHp)
+					lowest.stats [2] = lowest.maxHp;
 				return true;
 			} else
 				return false;
@@ -323,13 +323,13 @@ public class BattleManager : MonoBehaviour  {
 		if(ally)//search enemys
 		{
 			foreach (baseClass x in enemys) {
-				if ((x.stats [2] - (dmg - armor)) <= 0)
+				if ((x.stats [2] - (dmg - x.armor)) <= 0)
 					return x;
 			}
 		}
 		else//search party
 			foreach (baseClass x in party) {
-				if ((x.stats [2] - (dmg - armor)) <= 0)
+				if ((x.stats [2] - (dmg - x.armor)) <= 0)
 					return x;
 			}
 		return null;

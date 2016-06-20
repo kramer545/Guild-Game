@@ -47,14 +47,14 @@ public class baseClass : MonoBehaviour {
 
 	public bool IncrementCT()
 	{
-		int temp = CTBase * multiplier;
-		if (temp < CTLow)
-			temp = CTLow;
-		else if (temp > CTHigh)
-			temp = CTHigh;
+		int temp = CT_BASE * multiplier;
+		if (temp < CT_LOW)
+			temp = CT_LOW;
+		else if (temp > CT_HIGH)
+			temp = CT_HIGH;
 		stats [10] += temp;
-		if (stats [10] >= CTCap) {
-			stats [10] = -CTCap;
+		if (stats [10] >= CT_CAP) {
+			stats [10] = CT_CAP;
 			return true;//true if we reached CT cap
 		} else
 			return false;//false if CT cap not reached
@@ -89,7 +89,7 @@ public class baseClass : MonoBehaviour {
 				}
 				else if((role == 2) || (role == 6))//healer subrole
 				{
-					if(manager.allyHealthCheck(this,friendly))//if true, ally was healed
+					if(manager.allyHealthCheck(this,friendly,50))//if true, ally was healed
 					{
 						return;
 					}
@@ -106,8 +106,8 @@ public class baseClass : MonoBehaviour {
 
 			else if ((role >= 8) && (role < 12))//Healer main
 			{
-				baseClass oneShot = manager.instaKillCheck (this.dmg, friendly,90);
-				if(manager.allyHealthCheck(this,friendly))//if true, ally was healed
+				baseClass oneShot = manager.instaKillCheck (this.dmg, friendly);
+				if(manager.allyHealthCheck(this,friendly,80))//if true, ally was healed
 				{
 					return;
 				}
@@ -167,13 +167,7 @@ public class baseClass : MonoBehaviour {
 		stats [10] = 0;
 		//manager.
 	}
-
-	public void defend()
-	{
-		threat = (int)(threat * 0.9);
-		armor = (int)(armor * 1.2);
-		defended = true;
-	}
+		
 
 	public void attacked(baseClass attacker)
 	{
@@ -223,15 +217,15 @@ public class baseClass : MonoBehaviour {
 			{
 				if(rand < attacker.critChance)//if enemy crits
 				{
-					stats [2] = (stats [2] - (int)((dmg * attacker.critDmg) / blockReduction));
+					stats [2] = (stats [2] - (int)((dmg * attacker.critDmg) / BLOCK_REDUCTION));
 					if (stats [2] <= 0)
-						manager.removeUnit (this,friendly);
+						manager.removeUnit (this);
 				}
 				else
 				{
-					stats [2] = (stats [2] - (int)((dmg) / blockReduction));
+					stats [2] = (stats [2] - (int)((dmg) / BLOCK_REDUCTION));
 					if (stats [2] <= 0)
-						manager.removeUnit (this,friendly);
+						manager.removeUnit (this);
 				}
 			}
 		}
@@ -243,13 +237,13 @@ public class baseClass : MonoBehaviour {
 			{
 				stats [2] -= dmg*attacker.critDmg;
 				if (stats [2] <= 0)
-					manager.removeUnit (this,friendly);
+					manager.removeUnit (this);
 			}
 			else
 			{
 				stats [2] -= dmg;
 				if (stats [2] <= 0)
-					manager.removeUnit (this,friendly);
+					manager.removeUnit (this);
 			}
 		}
 	}

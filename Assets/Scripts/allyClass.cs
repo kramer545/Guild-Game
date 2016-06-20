@@ -45,4 +45,11 @@ public class allyClass : baseClass {
 			threat += (action* threatMulipler);
 		}
 	}
+
+	public void defend()
+	{
+		threat = (int)(this.threat * 0.9);
+		armor = (int)(armor * 1.2);
+		defended = true;
+	}
 }
