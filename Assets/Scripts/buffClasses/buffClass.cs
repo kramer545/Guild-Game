@@ -8,6 +8,7 @@ public class buffClass : MonoBehaviour {
 	public int duration;
 	public int percentBoost;
 	public baseClass user;
+	public BattleManager manager;
 
 	// Use this for initialization
 	public void Start (int duration,bool isBuff,bool oneTime,baseClass user) {

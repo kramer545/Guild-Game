@@ -39,7 +39,7 @@ public class baseClass : MonoBehaviour {
 	public List<buffClass> buffs;
 	public float healMultiplier = 1;
 	public bool lifeSteal = false;
-	public const float LIFE_STEAL_PERCENT = 0.2;//20%
+	public const double LIFE_STEAL_PERCENT = 0.2;//20%
 	public bool inflictStatus;
 
 	// Use this for initialization
@@ -220,7 +220,7 @@ public class baseClass : MonoBehaviour {
 			{
 				stats [2] -= dmg/(BLOCK_REDUCTION/2);
 				if(attacker.lifeSteal){
-					attacker.stats [2] += ((dmg / (BLOCK_REDUCTION / 2)) * LIFE_STEAL_PERCENT);
+					attacker.stats [2] += (int)((dmg / (BLOCK_REDUCTION / 2)) * LIFE_STEAL_PERCENT);
 					if (attacker.stats [2] > attacker.maxHp)
 						attacker.stats [2] = attacker.maxHp;
 				}
@@ -234,7 +234,7 @@ public class baseClass : MonoBehaviour {
 				{
 					stats [2] = (stats [2] - (int)((dmg * attacker.critDmg) / BLOCK_REDUCTION));
 					if(attacker.lifeSteal){
-						attacker.stats [2] += (dmg * attacker.critDmg * LIFE_STEAL_PERCENT);
+						attacker.stats [2] += (int)(dmg * attacker.critDmg * LIFE_STEAL_PERCENT);
 						if (attacker.stats [2] > attacker.maxHp)
 							attacker.stats [2] = attacker.maxHp;
 					}
@@ -245,7 +245,7 @@ public class baseClass : MonoBehaviour {
 				{
 					stats [2] = (stats [2] - (int)((dmg) / BLOCK_REDUCTION));
 					if(attacker.lifeSteal){
-						attacker.stats [2] += ((dmg / BLOCK_REDUCTION) * LIFE_STEAL_PERCENT);
+						attacker.stats [2] += (int)((dmg / BLOCK_REDUCTION) * LIFE_STEAL_PERCENT);
 						if (attacker.stats [2] > attacker.maxHp)
 							attacker.stats [2] = attacker.maxHp;
 					}
@@ -262,7 +262,7 @@ public class baseClass : MonoBehaviour {
 			{
 				stats [2] -= dmg*attacker.critDmg;
 				if(attacker.lifeSteal){
-					attacker.stats [2] += (dmg * attacker.critDmg * LIFE_STEAL_PERCENT);
+					attacker.stats [2] += (int)(dmg * attacker.critDmg * LIFE_STEAL_PERCENT);
 					if (attacker.stats [2] > attacker.maxHp)
 						attacker.stats [2] = attacker.maxHp;
 				}
@@ -273,7 +273,7 @@ public class baseClass : MonoBehaviour {
 			{
 				stats [2] -= dmg;
 				if(attacker.lifeSteal){
-					attacker.stats [2] += (dmg * LIFE_STEAL_PERCENT);
+					attacker.stats [2] += (int)(dmg * LIFE_STEAL_PERCENT);
 					if (attacker.stats [2] > attacker.maxHp)
 						attacker.stats [2] = attacker.maxHp;
 				}
