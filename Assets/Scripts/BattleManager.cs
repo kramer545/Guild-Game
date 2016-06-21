@@ -250,6 +250,7 @@ public class BattleManager : MonoBehaviour  {
 		if (turnOrder.Count < 8)//increment turn order up to at least 8
 			makeTurnOrder ();
 		Debug.Log (unit.name + " is dead");
+		unit.onDeath ();
 		return;
 	}
 
@@ -285,8 +286,7 @@ public class BattleManager : MonoBehaviour  {
 			}
 			if (lowest != null) {
 				lowest.stats [2] += heal;
-				if (lowest.stats [2] > lowest.maxHp)
-					lowest.stats [2] = lowest.maxHp;
+				overHealCheck (lowest);
 				return true;
 			} else
 				return false;
@@ -310,8 +310,7 @@ public class BattleManager : MonoBehaviour  {
 			}
 			if (lowest != null) {
 				lowest.stats [2] += heal;
-				if (lowest.stats [2] > lowest.maxHp)
-					lowest.stats [2] = lowest.maxHp;
+				overHealCheck (lowest);
 				return true;
 			} else
 				return false;
@@ -333,6 +332,35 @@ public class BattleManager : MonoBehaviour  {
 					return x;
 			}
 		return null;
+	}
+
+	public bool deathCheck(baseClass unit)
+	{
+		if (unit.stats[2]<=0)
+		{
+			removeUnit (unit);
+			return true;
+		}
+		return false;
+	}
+
+	public bool overHealCheck(baseClass unit)
+	{
+		if (unit.stats[2] >= unit.maxHp)
+		{
+			unit.stats [2] = unit.maxHp;
+			return true;
+		}
+		return false;
+	}
+
+	public bool overManaCheck(baseClass unit)
+	{
+		if(unit.stats[3] >= unit.maxMana){
+			unit.stats [3] = unit.maxMana;
+			return true;
+		}
+		return false;
 	}
 
 }

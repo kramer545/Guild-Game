@@ -18,8 +18,7 @@ public class manaBuff : buffClass {//returns percent of max mana to user
 	public void applyBuff()
 	{
 		user.stats [3] += user.maxMana * percentBoost;
-		if (user.stats [3] > user.maxMana)
-			user.stats [3] = user.maxMana;
+		manager.overManaCheck (user);
 	}
 
 	public void revertBuff()//auto called by tickBuff when duration is up

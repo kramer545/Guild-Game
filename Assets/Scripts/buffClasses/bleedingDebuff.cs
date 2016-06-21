@@ -18,8 +18,7 @@ public class bleedingDebuff : buffClass {//deals little dmg over a very short ti
 	public void applyBuff()
 	{
 		user.stats [2] -= user.maxHp * percentBoost;
-		if (user.stats [2] <= 0)
-			user.manager.removeUnit (user);
+		manager.deathCheck (user);
 	}
 
 	public void revertBuff()//auto called by tickBuff when duration is up

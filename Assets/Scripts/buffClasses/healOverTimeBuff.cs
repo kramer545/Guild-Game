@@ -18,8 +18,7 @@ public class healOverTimeBuff : buffClass {//returns percent of max HP to user
 	public void applyBuff()
 	{
 		user.stats [2] += user.maxHp * percentBoost;
-		if (user.stats [2] > user.maxHp)
-			user.stats [2] = user.maxHp;
+		manager.overHealCheck (user);
 	}
 
 	public void revertBuff()//auto called by tickBuff when duration is up

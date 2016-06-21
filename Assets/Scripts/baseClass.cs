@@ -221,11 +221,9 @@ public class baseClass : MonoBehaviour {
 				stats [2] -= dmg/(BLOCK_REDUCTION/2);
 				if(attacker.lifeSteal){
 					attacker.stats [2] += (int)((dmg / (BLOCK_REDUCTION / 2)) * LIFE_STEAL_PERCENT);
-					if (attacker.stats [2] > attacker.maxHp)
-						attacker.stats [2] = attacker.maxHp;
+					manager.overHealCheck (attacker);
 				}
-				if (stats [2] <= 0)
-					manager.removeUnit (this);
+				manager.deathCheck (this);
 
 			}
 			else
@@ -235,22 +233,18 @@ public class baseClass : MonoBehaviour {
 					stats [2] = (stats [2] - (int)((dmg * attacker.critDmg) / BLOCK_REDUCTION));
 					if(attacker.lifeSteal){
 						attacker.stats [2] += (int)(dmg * attacker.critDmg * LIFE_STEAL_PERCENT);
-						if (attacker.stats [2] > attacker.maxHp)
-							attacker.stats [2] = attacker.maxHp;
+						manager.overHealCheck (attacker);
 					}
-					if (stats [2] <= 0)
-						manager.removeUnit (this);
+					manager.deathCheck (this);
 				}
 				else
 				{
 					stats [2] = (stats [2] - (int)((dmg) / BLOCK_REDUCTION));
 					if(attacker.lifeSteal){
 						attacker.stats [2] += (int)((dmg / BLOCK_REDUCTION) * LIFE_STEAL_PERCENT);
-						if (attacker.stats [2] > attacker.maxHp)
-							attacker.stats [2] = attacker.maxHp;
+						manager.overHealCheck (attacker);
 					}
-					if (stats [2] <= 0)
-						manager.removeUnit (this);
+					manager.deathCheck (this);
 				}
 			}
 		}
@@ -263,22 +257,18 @@ public class baseClass : MonoBehaviour {
 				stats [2] -= dmg*attacker.critDmg;
 				if(attacker.lifeSteal){
 					attacker.stats [2] += (int)(dmg * attacker.critDmg * LIFE_STEAL_PERCENT);
-					if (attacker.stats [2] > attacker.maxHp)
-						attacker.stats [2] = attacker.maxHp;
+					manager.overHealCheck (attacker);
 				}
-				if (stats [2] <= 0)
-					manager.removeUnit (this);
+				manager.deathCheck (this);
 			}
 			else
 			{
 				stats [2] -= dmg;
 				if(attacker.lifeSteal){
 					attacker.stats [2] += (int)(dmg * LIFE_STEAL_PERCENT);
-					if (attacker.stats [2] > attacker.maxHp)
-						attacker.stats [2] = attacker.maxHp;
+					manager.overHealCheck (attacker);
 				}
-				if (stats [2] <= 0)
-					manager.removeUnit (this);
+				manager.deathCheck (this);
 			}
 		}
 	}
