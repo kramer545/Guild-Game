@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class baseClass : MonoBehaviour {
 
@@ -9,6 +10,7 @@ public class baseClass : MonoBehaviour {
 	public int role;
 	public int multiplier;
 	public int maxHp;
+	public int maxMana;
 	public bool negStatus;
 	public bool buffed;
 	public bool debuffed;
@@ -31,9 +33,10 @@ public class baseClass : MonoBehaviour {
 	public float physMult;
 	public float magMult;
 	public weaponClass weapon;
-	public int attackType;
+	public int attackType;//0 = phys, 1 = magic, anything else is both
 	public const float HEAL_MULTIPLIER = 5;
 	public bool healerSubclass;
+	public List<buffClass> buffs;
 
 	// Use this for initialization
 	void Start () {
@@ -176,24 +179,24 @@ public class baseClass : MonoBehaviour {
 		//calculating dmg stage
 		if(attacker.attackType == 0)//phys attack
 		{
-			dmg =(((attacker.stats [4] * attacker.physMult) + attacker.weapon.physDmg) - stats [5]);
+			dmg =(int)(((attacker.stats [4] * attacker.physMult) + attacker.weapon.physDmg) - stats [5]);
 			if (dmg < (attacker.stats [0] * 10))//if dmg is below attacker level times 10, set it to min dmg
 				dmg = (attacker.stats [0] * 10);
 
 		}
 		else if (attacker.attackType == 1)//magic attack
 		{
-			dmg = (((attacker.stats [7] * attacker.magMult) + attacker.weapon.magDmg) - stats [8]);
+			dmg = (int)(((attacker.stats [7] * attacker.magMult) + attacker.weapon.magDmg) - stats [8]);
 			if (dmg < (attacker.stats [0] * 10))//if dmg is below attacker level times 10, set it to min dmg
 				dmg = (attacker.stats [0] * 10);
 		}
 		else//both phys and magic
 		{
-			dmg = (((attacker.stats [4] * attacker.physMult) + attacker.weapon.physDmg) - stats [5]);
+			dmg = (int)(((attacker.stats [4] * attacker.physMult) + attacker.weapon.physDmg) - stats [5]);
 			if (dmg < 0)//if phys dmg is below zero, set to min dmg
 				dmg = (int)((attacker.stats [0] * 10) / 2);
 			if ((((attacker.stats [7] * attacker.magMult) + attacker.weapon.magDmg) - stats [8]) > 0)
-				dmg += (((attacker.stats [7] * attacker.magMult) + attacker.weapon.magDmg) - stats [8]);
+				dmg += (int)(((attacker.stats [7] * attacker.magMult) + attacker.weapon.magDmg) - stats [8]);
 			else
 				dmg +=(int)((attacker.stats [0] * 10) / 2);
 		}

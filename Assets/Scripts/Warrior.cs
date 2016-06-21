@@ -5,6 +5,7 @@ public class Warrior : allyClass {
 
 	const double StanceModifier = 0.2;
 	bool DeterminedSkill = false;//TODO change how skills are handled
+	const int DeterminedSkillThreat = 30;
 
 	// Use this for initialization
 	void Start () {
@@ -35,13 +36,13 @@ public class Warrior : allyClass {
 		if((role == 1) || (role == 0))//if dps main role
 		{
 			stats [4] += (int)(stats [4] * StanceModifier);
-			threatMulipler = 1;
+			threatMultiplier = 1;
 		}
 
 		else//Tank main role
 		{
 			stats [5] += (int)(stats [5] * StanceModifier);
-			threatMulipler = 1.3;
+			threatMultiplier = 1.3;
 		}
 	}
 
@@ -52,17 +53,17 @@ public class Warrior : allyClass {
 			stats [2] += (int)(0.1 * maxHp);
 			if (stats [2] > maxHp)
 				stats [2] = maxHp;
-			incrementThreat()
+			incrementThreat (DeterminedSkillThreat);
 		}
 
 		else if ((stats[2] <= (maxHp/4)) && (manager.command != 5) && (manager.command != 5))
 		{
-			defend (1);
+			defend ();
 		}
 
 		else{
 			 (manager.targetEnemy).attacked(this);
-			incrementThreat(0)
+			incrementThreat (0);
 		}
 	}
 }
