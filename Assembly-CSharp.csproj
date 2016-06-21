@@ -49,9 +49,15 @@
      <Compile Include="Assets\Scripts\Warrior.cs" />
      <Compile Include="Assets\Scripts\allyClass.cs" />
      <Compile Include="Assets\Scripts\baseClass.cs" />
+     <Compile Include="Assets\Scripts\buffClasses\allBuff.cs" />
      <Compile Include="Assets\Scripts\buffClasses\buffClass.cs" />
+     <Compile Include="Assets\Scripts\buffClasses\critChanceBuff.cs" />
      <Compile Include="Assets\Scripts\buffClasses\defBuff.cs" />
      <Compile Include="Assets\Scripts\buffClasses\dmgBuff.cs" />
+     <Compile Include="Assets\Scripts\buffClasses\dodgeBuff.cs" />
+     <Compile Include="Assets\Scripts\buffClasses\healOverTimeBuff.cs" />
+     <Compile Include="Assets\Scripts\buffClasses\healUpBuff.cs" />
+     <Compile Include="Assets\Scripts\buffClasses\lifeStealBuff.cs" />
      <Compile Include="Assets\Scripts\buffClasses\manaBuff.cs" />
      <Compile Include="Assets\Scripts\buffClasses\speedBuff.cs" />
      <Compile Include="Assets\Scripts\enemyClass.cs" />

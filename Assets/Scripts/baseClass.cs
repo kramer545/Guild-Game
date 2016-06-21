@@ -34,9 +34,13 @@ public class baseClass : MonoBehaviour {
 	public float magMult;
 	public weaponClass weapon;
 	public int attackType;//0 = phys, 1 = magic, anything else is both
-	public const float HEAL_MULTIPLIER = 5;
+	public const float HEALING_MULTIPLIER = 5;
 	public bool healerSubclass;
 	public List<buffClass> buffs;
+	public float healMultiplier = 1;
+	public bool lifeSteal = false;
+	public const float LIFE_STEAL_PERCENT = 0.2;//20%
+	public bool inflictStatus;
 
 	// Use this for initialization
 	void Start () {
@@ -215,18 +219,36 @@ public class baseClass : MonoBehaviour {
 			if (attacker.attackType == 2)//blocking magic is only 50% effective
 			{
 				stats [2] -= dmg/(BLOCK_REDUCTION/2);
+				if(attacker.lifeSteal){
+					attacker.stats [2] += ((dmg / (BLOCK_REDUCTION / 2)) * LIFE_STEAL_PERCENT);
+					if (attacker.stats [2] > attacker.maxHp)
+						attacker.stats [2] = attacker.maxHp;
+				}
+				if (stats [2] <= 0)
+					manager.removeUnit (this);
+
 			}
 			else
 			{
 				if(rand < attacker.critChance)//if enemy crits
 				{
 					stats [2] = (stats [2] - (int)((dmg * attacker.critDmg) / BLOCK_REDUCTION));
+					if(attacker.lifeSteal){
+						attacker.stats [2] += (dmg * attacker.critDmg * LIFE_STEAL_PERCENT);
+						if (attacker.stats [2] > attacker.maxHp)
+							attacker.stats [2] = attacker.maxHp;
+					}
 					if (stats [2] <= 0)
 						manager.removeUnit (this);
 				}
 				else
 				{
 					stats [2] = (stats [2] - (int)((dmg) / BLOCK_REDUCTION));
+					if(attacker.lifeSteal){
+						attacker.stats [2] += ((dmg / BLOCK_REDUCTION) * LIFE_STEAL_PERCENT);
+						if (attacker.stats [2] > attacker.maxHp)
+							attacker.stats [2] = attacker.maxHp;
+					}
 					if (stats [2] <= 0)
 						manager.removeUnit (this);
 				}
@@ -239,12 +261,22 @@ public class baseClass : MonoBehaviour {
 			if((rand < attacker.critChance) && (attacker.attackType != 2))//if enemy crits(cant crit if magic attack)
 			{
 				stats [2] -= dmg*attacker.critDmg;
+				if(attacker.lifeSteal){
+					attacker.stats [2] += (dmg * attacker.critDmg * LIFE_STEAL_PERCENT);
+					if (attacker.stats [2] > attacker.maxHp)
+						attacker.stats [2] = attacker.maxHp;
+				}
 				if (stats [2] <= 0)
 					manager.removeUnit (this);
 			}
 			else
 			{
 				stats [2] -= dmg;
+				if(attacker.lifeSteal){
+					attacker.stats [2] += (dmg * LIFE_STEAL_PERCENT);
+					if (attacker.stats [2] > attacker.maxHp)
+						attacker.stats [2] = attacker.maxHp;
+				}
 				if (stats [2] <= 0)
 					manager.removeUnit (this);
 			}

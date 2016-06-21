@@ -267,7 +267,7 @@ public class BattleManager : MonoBehaviour  {
 	public bool allyHealthCheck(baseClass healer,bool ally,int healPercent)
 	{
 		baseClass lowest = null;
-		int heal = (int)(healer.stats [7] * baseClass.HEAL_MULTIPLIER);
+		int heal = (int)(healer.stats [7] * baseClass.HEALING_MULTIPLIER);
 		if(ally)//player party
 		{
 			foreach(baseClass x in party)
