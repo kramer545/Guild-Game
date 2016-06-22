@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class spdBuff : buffClass {//buffs spd for user
+public class hitChanceBuff : buffClass {
 
+	public const int BASE_INCREASE = 25; //25% base increase to hit chance
+	public int bonus = 0;
 
 	// Use this for initialization
 	void Start (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
-		base.Start(duration,true, true,user,isBuffed,isDebuffed);
+		base.Start(duration,true, true,user);
 		this.percentBoost = percentBoost;
 	}
 
@@ -18,15 +20,14 @@ public class spdBuff : buffClass {//buffs spd for user
 	public void oneTimeBuff()
 	{
 		if (buffBuffed)
-			percentBoost = percentBoost + ((1 - percentBoost) * 0.5);
+			bonus += 10;
 		if (buffDebuffed)
-			percentBoost = percentBoost - ((1 - percentBoost) * 0.5);
-		statChange = ((int)(user.stats [6] * percentBoost)) - user.stats [6];
-		user.stats [6] = user.stats [6] + statChange;
+			bonus -= 10;
+		user.hitChance = user.hitChance + BASE_INCREASE + bonus;
 	}
 
 	public void revertBuff()//auto called by tickBuff when duration is up
 	{
-		user.stats [6] = user.stats [6] - statChange;
+		user.hitChance = user.hitChance - BASE_INCREASE - bonus;
 	}
 }

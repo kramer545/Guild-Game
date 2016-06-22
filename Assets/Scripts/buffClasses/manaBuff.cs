@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class manaBuff : buffClass {//returns percent of max mana to user
+public class manaBuff : buffClass {//returns percent of max HP to user
 
 
 	// Use this for initialization
-	void Start (int duration,baseClass user,int percentBoost) {
+	void Start (int duration,baseClass user,double percentBoost) {
 		base.Start(duration,true, false,user);
 		this.percentBoost = percentBoost;
 	}
@@ -17,7 +17,9 @@ public class manaBuff : buffClass {//returns percent of max mana to user
 
 	public void applyBuff()
 	{
-		user.stats [3] += user.maxMana * percentBoost;
+		if (buffBuffed)
+			percentBoost = percentBoost + ((1 - percentBoost) * 0.5);
+		user.stats [3] += (int)(user.maxMana * percentBoost);
 		manager.overManaCheck (user);
 	}
 

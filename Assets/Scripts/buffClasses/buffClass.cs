@@ -6,9 +6,12 @@ public class buffClass : MonoBehaviour {
 	public bool isBuff;//false if debuff
 	public bool oneTime;//onetime boost, or boost every tick?
 	public int duration;
-	public int percentBoost;
+	public double percentBoost;
 	public baseClass user;
 	public BattleManager manager;
+	public bool buffBuffed = false;
+	public bool buffDebuffed = false;
+	public int statChange;
 
 	// Use this for initialization
 	public void Start (int duration,bool isBuff,bool oneTime,baseClass user) {
@@ -16,6 +19,17 @@ public class buffClass : MonoBehaviour {
 		this.isBuff = isBuff;
 		this.oneTime = oneTime;
 		this.user = user;
+		if (oneTime)
+			oneTimeBuff ();
+	}
+
+	public void Start (int duration,bool isBuff,bool oneTime,baseClass user,bool isBuffed,bool isDebuffed) {
+		this.duration = duration;
+		this.isBuff = isBuff;
+		this.oneTime = oneTime;
+		this.user = user;
+		buffBuffed = isBuffed;
+		buffDebuffed = isDebuffed;
 		if (oneTime)
 			oneTimeBuff ();
 	}

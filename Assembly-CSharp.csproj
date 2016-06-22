@@ -63,6 +63,8 @@
      <Compile Include="Assets\Scripts\buffClasses\dodgeDebuff.cs" />
      <Compile Include="Assets\Scripts\buffClasses\healOverTimeBuff.cs" />
      <Compile Include="Assets\Scripts\buffClasses\healUpBuff.cs" />
+     <Compile Include="Assets\Scripts\buffClasses\hitChanceBuff.cs" />
+     <Compile Include="Assets\Scripts\buffClasses\hitChanceDebuff.cs" />
      <Compile Include="Assets\Scripts\buffClasses\lifeStealBuff.cs" />
      <Compile Include="Assets\Scripts\buffClasses\manaBuff.cs" />
      <Compile Include="Assets\Scripts\buffClasses\poisonDebuff.cs" />

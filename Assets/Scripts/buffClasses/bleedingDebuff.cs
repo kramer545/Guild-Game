@@ -5,8 +5,8 @@ public class bleedingDebuff : buffClass {//deals little dmg over a very short ti
 
 
 	// Use this for initialization
-	void Start (int duration,baseClass user,int percentBoost) {
-		base.Start(duration,true, false,user);
+	void Start (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
+		base.Start(duration,false, false,user);
 		this.percentBoost = percentBoost;
 	}
 
@@ -17,7 +17,11 @@ public class bleedingDebuff : buffClass {//deals little dmg over a very short ti
 
 	public void applyBuff()
 	{
-		user.stats [2] -= user.maxHp * percentBoost;
+		if (buffBuffed)
+			percentBoost = percentBoost + ((1 - percentBoost) * 0.5);
+		if (buffDebuffed)
+			percentBoost = percentBoost - ((1 - percentBoost) * 0.5);
+		user.stats [2] -= (int)(user.maxHp * percentBoost);
 		manager.deathCheck (user);
 	}
 

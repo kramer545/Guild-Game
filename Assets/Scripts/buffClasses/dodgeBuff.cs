@@ -1,11 +1,11 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 
-public class dodgeBuff : buffClass {//buffs dodge chance for user
+public class dodgeBuff : buffClass {//buffs crit chance for user
 
-
+	public const int BASE_DODGE = 10;
+	public int bonus = 0;
 	// Use this for initialization
-	void Start (int duration,baseClass user,int percentBoost) {
+	void Start (int duration,baseClass user,double percentBoost) {
 		base.Start(duration,true, true,user);
 		this.percentBoost = percentBoost;
 	}
@@ -17,11 +17,15 @@ public class dodgeBuff : buffClass {//buffs dodge chance for user
 
 	public void oneTimeBuff()
 	{
-		user.dodgeChance = user.dodgeChance * percentBoost;
+		if (buffBuffed)
+			bonus += 5;
+		if (buffDebuffed)
+			bonus -= 5;
+		user.dodgeChance = user.dodgeChance + BASE_DODGE + bonus;
 	}
 
 	public void revertBuff()//auto called by tickBuff when duration is up
 	{
-		user.dodgeChance = user.dodgeChance / percentBoost;
+		user.dodgeChance = user.dodgeChance - BASE_DODGE - bonus;
 	}
 }

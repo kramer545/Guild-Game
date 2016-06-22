@@ -5,7 +5,7 @@ public class lifeStealBuff : buffClass {//buffs healing DONE to user
 
 
 	// Use this for initialization
-	void Start (int duration,baseClass user,int percentBoost) {
+	void Start (int duration,baseClass user,double percentBoost) {
 		base.Start(duration,true, true,user);
 		this.percentBoost = percentBoost;
 	}
@@ -17,7 +17,7 @@ public class lifeStealBuff : buffClass {//buffs healing DONE to user
 
 	public void oneTimeBuff()
 	{
-		user.lifeSteal = true;
+		user.activateLifeSteal (buffBuffed);
 	}
 
 	public void revertBuff()//auto called by tickBuff when duration is up

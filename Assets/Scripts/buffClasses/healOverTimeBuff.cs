@@ -5,7 +5,7 @@ public class healOverTimeBuff : buffClass {//returns percent of max HP to user
 
 
 	// Use this for initialization
-	void Start (int duration,baseClass user,int percentBoost) {
+	void Start (int duration,baseClass user,double percentBoost) {
 		base.Start(duration,true, false,user);
 		this.percentBoost = percentBoost;
 	}
@@ -17,7 +17,11 @@ public class healOverTimeBuff : buffClass {//returns percent of max HP to user
 
 	public void applyBuff()
 	{
-		user.stats [2] += user.maxHp * percentBoost;
+		if (buffBuffed)
+			percentBoost = percentBoost + ((1 - percentBoost) * 0.5);
+		if (buffDebuffed)
+			percentBoost = percentBoost - ((1 - percentBoost) * 0.5);
+		user.stats [2] += (int)(user.maxHp * percentBoost);
 		manager.overHealCheck (user);
 	}
 

@@ -5,8 +5,8 @@ public class spdDebuff : buffClass {//debuffs spd for user
 
 
 	// Use this for initialization
-	void Start (int duration,baseClass user,int percentBoost) {
-		base.Start(duration,true, true,user);
+	void Start (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
+		base.Start(duration,false, true,user,isBuffed,isDebuffed);
 		this.percentBoost = percentBoost;
 	}
 
@@ -17,11 +17,16 @@ public class spdDebuff : buffClass {//debuffs spd for user
 
 	public void oneTimeBuff()
 	{
-		user.stats [6] = user.stats [6] * percentBoost;
+		if (buffBuffed)
+			percentBoost = percentBoost + ((1 - percentBoost) * 0.5);
+		if (buffDebuffed)
+			percentBoost = percentBoost - ((1 - percentBoost) * 0.5);
+		statChange = ((int)(user.stats [6] * percentBoost)) - user.stats [6];
+		user.stats [6] = user.stats [6] - statChange;
 	}
 
 	public void revertBuff()//auto called by tickBuff when duration is up
 	{
-		user.stats [6] = user.stats [6] / percentBoost;
+		user.stats [6] = user.stats [6] + statChange;
 	}
 }

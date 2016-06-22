@@ -3,10 +3,10 @@ using System.Collections;
 
 public class defDebuff : buffClass {//buffs both phys/magic def for user
 
-
+	int statChangeTwo;
 	// Use this for initialization
-	void Start (int duration,baseClass user,int percentBoost) {
-		base.Start(duration,true, true,user);
+	void Start (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
+		base.Start(duration,false, true,user);
 		this.percentBoost = percentBoost;
 	}
 
@@ -17,13 +17,19 @@ public class defDebuff : buffClass {//buffs both phys/magic def for user
 
 	public void oneTimeBuff()
 	{
-		user.stats [5] = user.stats [5] * percentBoost;
-		user.stats [8] = user.stats [8] * percentBoost;
+		if (buffBuffed)
+			percentBoost = percentBoost + ((1 - percentBoost) * 0.5);
+		if (buffDebuffed)
+			percentBoost = percentBoost - ((1 - percentBoost) * 0.5);
+		statChange = ((int)(user.stats [5] * percentBoost)) - user.stats [5];
+		statChangeTwo = ((int)(user.stats [8] * percentBoost)) - user.stats [8];
+		user.stats [5] = user.stats [5] - statChange;
+		user.stats [8] = user.stats [8] - statChangeTwo;
 	}
 
 	public void revertBuff()//auto called by tickBuff when duration is up
 	{
-		user.stats [5] = user.stats [5] / percentBoost;
-		user.stats [8] = user.stats [8] / percentBoost;
+		user.stats [5] = user.stats [5] + statChange;
+		user.stats [8] = user.stats [8] + statChangeTwo;
 	}
 }

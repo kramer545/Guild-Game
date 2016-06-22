@@ -40,11 +40,14 @@ public class baseClass : MonoBehaviour {
 	public float healMultiplier = 1;
 	public bool lifeSteal = false;
 	public const double LIFE_STEAL_PERCENT = 0.2;//20%
+	public const double LIFE_STEAL_BONUS = 0.1;//10%
+	public double lifeStealAmount;
 	public bool inflictStatus;
+	public int hitChance;
 
 	// Use this for initialization
 	void Start () {
-		
+		hitChance = weapon.accuracy;
 	}
 	
 	// Update is called once per frame
@@ -174,6 +177,14 @@ public class baseClass : MonoBehaviour {
 		stats [10] = 0;
 		//manager.
 	}
+
+	public void activateLifeSteal(bool buffed)
+	{
+		lifeSteal = true;
+		lifeStealAmount = LIFE_STEAL_PERCENT;
+		if (buffed)
+			lifeStealAmount += LIFE_STEAL_BONUS;
+	}
 		
 
 	public void attacked(baseClass attacker)
@@ -206,7 +217,7 @@ public class baseClass : MonoBehaviour {
 		}
 
 		//checking for dodges, blocks and crits, then applys dmg
-		if((rand <= dodgeChance) && (attacker.attackType != 1))//dodging, no dmg, can't dodge magic
+		if((rand >= (attacker.hitChance - dodgeChance)) && (attacker.attackType != 1))//dodging, no dmg, can't dodge magic
 		{
 			Debug.Log ("Attack Dodged");
 			//TODO print dodge statement/animation
