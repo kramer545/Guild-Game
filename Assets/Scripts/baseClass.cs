@@ -44,6 +44,8 @@ public class baseClass : MonoBehaviour {
 	public double lifeStealAmount;
 	public bool inflictStatus;
 	public int hitChance;
+	public int barrierCharges;
+	public bool isSleeping = false;
 
 	// Use this for initialization
 	void Start () {
@@ -53,6 +55,11 @@ public class baseClass : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//call animation loop?
+	}
+
+	public bool doBuff(baseClass buffTarget)//action of trying to apply buff/debuff, returns true on success, false on failure
+	{
+		return false;
 	}
 
 	public bool IncrementCT()
@@ -83,6 +90,11 @@ public class baseClass : MonoBehaviour {
 			armor = (int)(armor / 1.2);
 		}
 
+		if(isSleeping)//turn skipped
+		{
+			Debug.Log (charName + " is asleep");
+		}
+
 		if(skillActivated)//TODO figuare this out!
 		{
 			
@@ -107,6 +119,7 @@ public class baseClass : MonoBehaviour {
 				else if ((role == 7) || (role == 3))//support subrole
 				{
 					//TODO support stuff
+
 				}
 				else
 				{
@@ -178,6 +191,15 @@ public class baseClass : MonoBehaviour {
 		//manager.
 	}
 
+	public void iterateBuffs()
+	{
+		foreach (buffClass x in buffs)
+		{
+			if (x.tickBuff ())
+				buffs.Remove (x);
+		}
+	}
+
 	public void activateLifeSteal(bool buffed)
 	{
 		lifeSteal = true;
@@ -191,6 +213,19 @@ public class baseClass : MonoBehaviour {
 	{
 		int rand = (int)Random.Range (0, 100);
 		int dmg;
+
+		if(barrierCharges > 0)
+		{
+			Debug.Log ("Attack Absorbed");
+			barrierCharges--;
+		}
+		if((rand >= (attacker.hitChance - dodgeChance)) && (attacker.attackType != 1) && (!isSleeping))//dodging, no dmg, can't dodge magic
+		{
+			Debug.Log ("Attack Dodged");
+			//TODO print dodge statement/animation
+			//no dmg done
+		}
+
 		//calculating dmg stage
 		if(attacker.attackType == 0)//phys attack
 		{
@@ -217,14 +252,7 @@ public class baseClass : MonoBehaviour {
 		}
 
 		//checking for dodges, blocks and crits, then applys dmg
-		if((rand >= (attacker.hitChance - dodgeChance)) && (attacker.attackType != 1))//dodging, no dmg, can't dodge magic
-		{
-			Debug.Log ("Attack Dodged");
-			//TODO print dodge statement/animation
-			//no dmg done
-		}
-
-		else if (rand < blockChance)//blocking, reduces dmg
+		if ((rand < blockChance) && (!isSleeping))//blocking, reduces dmg
 		{
 			rand = (int)Random.Range (0, 100);
 			if (attacker.attackType == 2)//blocking magic is only 50% effective
@@ -263,7 +291,7 @@ public class baseClass : MonoBehaviour {
 		else//no special effects
 		{
 			rand = (int)Random.Range (0, 100);
-			if((rand < attacker.critChance) && (attacker.attackType != 2))//if enemy crits(cant crit if magic attack)
+			if(((rand < attacker.critChance)|| (isSleeping)) && (attacker.attackType != 2))//if enemy crits(cant crit if magic attack)
 			{
 				stats [2] -= dmg*attacker.critDmg;
 				if(attacker.lifeSteal){

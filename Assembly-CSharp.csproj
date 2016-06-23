@@ -68,6 +68,7 @@
      <Compile Include="Assets\Scripts\buffClasses\lifeStealBuff.cs" />
      <Compile Include="Assets\Scripts\buffClasses\manaBuff.cs" />
      <Compile Include="Assets\Scripts\buffClasses\poisonDebuff.cs" />
+     <Compile Include="Assets\Scripts\buffClasses\sleepDebuff.cs" />
      <Compile Include="Assets\Scripts\buffClasses\spdDebuff.cs" />
      <Compile Include="Assets\Scripts\buffClasses\speedBuff.cs" />
      <Compile Include="Assets\Scripts\enemyClass.cs" />
