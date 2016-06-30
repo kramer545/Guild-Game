@@ -6,7 +6,7 @@ public class sleepDebuff : buffClass {//puts user to sleep
 
 	// Use this for initialization
 	void Start (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
-		base.Start(duration,false, true,user,isBuffed,isDebuffed);
+		base.Start(duration,false, true,user,20,isBuffed,isDebuffed);
 		this.percentBoost = percentBoost;
 	}
 

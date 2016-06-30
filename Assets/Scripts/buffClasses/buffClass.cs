@@ -12,24 +12,27 @@ public class buffClass : MonoBehaviour {
 	public bool buffBuffed = false;
 	public bool buffDebuffed = false;
 	public int statChange;
+	public int buffNum;
 
 	// Use this for initialization
-	public void Start (int duration,bool isBuff,bool oneTime,baseClass user) {
+	public void Start (int duration,bool isBuff,bool oneTime,baseClass user,int buffNum) {
 		this.duration = duration;
 		this.isBuff = isBuff;
 		this.oneTime = oneTime;
 		this.user = user;
+		this.buffNum = buffNum;
 		if (oneTime)
 			oneTimeBuff ();
 	}
 
-	public void Start (int duration,bool isBuff,bool oneTime,baseClass user,bool isBuffed,bool isDebuffed) {
+	public void Start (int duration,bool isBuff,bool oneTime,baseClass user,int buffNum,bool isBuffed,bool isDebuffed) {
 		this.duration = duration;
 		this.isBuff = isBuff;
 		this.oneTime = oneTime;
 		this.user = user;
 		buffBuffed = isBuffed;
 		buffDebuffed = isDebuffed;
+		this.buffNum = buffNum;
 		if (oneTime)
 			oneTimeBuff ();
 	}

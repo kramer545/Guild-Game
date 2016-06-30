@@ -3,10 +3,10 @@ using System.Collections;
 
 public class manaBuff : buffClass {//returns percent of max HP to user
 
-
+	bool firstRun = true;
 	// Use this for initialization
-	void Start (int duration,baseClass user,double percentBoost) {
-		base.Start(duration,true, false,user);
+	void Start (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
+		base.Start(duration,true, false,user,10,isBuffed,isDebuffed);
 		this.percentBoost = percentBoost;
 	}
 
@@ -17,8 +17,13 @@ public class manaBuff : buffClass {//returns percent of max HP to user
 
 	public void applyBuff()
 	{
-		if (buffBuffed)
-			percentBoost = percentBoost + ((1 - percentBoost) * 0.5);
+		if (firstRun) {
+			if (buffBuffed)
+				percentBoost = percentBoost + ((1 - percentBoost) * 0.5);
+			if (buffDebuffed)
+				percentBoost = percentBoost - ((1 - percentBoost) * 0.5);
+			firstRun = false;
+		}
 		user.stats [3] += (int)(user.maxMana * percentBoost);
 		manager.overManaCheck (user);
 	}

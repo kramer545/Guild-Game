@@ -6,7 +6,7 @@ public class lifeStealBuff : buffClass {//buffs healing DONE to user
 
 	// Use this for initialization
 	void Start (int duration,baseClass user,double percentBoost) {
-		base.Start(duration,true, true,user);
+		base.Start(duration,true, true,user,9);
 		this.percentBoost = percentBoost;
 	}
 

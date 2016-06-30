@@ -3,10 +3,10 @@ using System.Collections;
 
 public class poisonDebuff : buffClass {//deals little dmg over a very short time
 
-
+	bool firstRun = true;
 	// Use this for initialization
-	void Start (int duration,baseClass user,double percentBoost) {
-		base.Start(duration,false, false,user);
+	void Start (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed {
+		base.Start(duration,false, false,user,19,isBuffed,isDebuffed);
 		this.percentBoost = percentBoost;
 	}
 
@@ -17,10 +17,13 @@ public class poisonDebuff : buffClass {//deals little dmg over a very short time
 
 	public void applyBuff()
 	{
-		if (buffBuffed)
-			percentBoost = percentBoost + ((1 - percentBoost) * 0.5);
-		if (buffDebuffed)
-			percentBoost = percentBoost - ((1 - percentBoost) * 0.5);
+			if (firstRun) {
+				if (buffBuffed)
+					percentBoost = percentBoost + ((1 - percentBoost) * 0.5);
+				if (buffDebuffed)
+					percentBoost = percentBoost - ((1 - percentBoost) * 0.5);
+				firstRun = false;
+			}
 		user.stats [2] -= (int)(user.maxHp * percentBoost);
 		manager.deathCheck (user);
 	}

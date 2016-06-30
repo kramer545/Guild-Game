@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class defDebuff : buffClass {//buffs both phys/magic def for user
+public class defDebuff : buffClass {//debuffs both phys/magic def for user
 
 	int statChangeTwo;
 	// Use this for initialization
 	void Start (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
-		base.Start(duration,false, true,user);
+		base.Start(duration,false, true,user,15,isBuffed,isDebuffed);
 		this.percentBoost = percentBoost;
 	}
 

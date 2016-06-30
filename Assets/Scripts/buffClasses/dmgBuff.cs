@@ -3,10 +3,11 @@ using System.Collections;
 
 public class dmgBuff : buffClass {//buffs phys/magic dmg for user
 
+	int statChangeTwo;
 
 	// Use this for initialization
 	void Start (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
-		base.Start(duration,true, true,user);
+		base.Start(duration,true, true,user,4,isBuffed,isDebuffed);
 		this.percentBoost = percentBoost;
 	}
 	
@@ -17,27 +18,26 @@ public class dmgBuff : buffClass {//buffs phys/magic dmg for user
 
 	public void oneTimeBuff()
 	{
+		if (buffBuffed)
+			percentBoost = percentBoost + ((1 - percentBoost) * 0.5);
+		if (buffDebuffed)
+			percentBoost = percentBoost - ((1 - percentBoost) * 0.5);
 		if(user.attackType == 0)
-			user.stats [4] = (int)(user.stats [4] * percentBoost);
+			statChange = (int)(user.stats [4] * percentBoost);
 		else if (user.attackType == 1)
-			user.stats [7] = (int)(user.stats [7] * percentBoost);
+			statChangeTwo = (int)(user.stats [7] * percentBoost);
 		else//buff both phys and magic at half effectiveness each
 		{
-			user.stats [4] = (int)(user.stats [4] * (percentBoost/2));
-			user.stats [7] = (int)(user.stats [7] * (percentBoost/2));
+			statChange = (int)(user.stats [4] * (percentBoost/2));
+			statChangeTwo = (int)(user.stats [7] * (percentBoost/2));
 		}
+		user.stats [4] += statChange;
+		user.stats [7] += statChangeTwo;
 	}
 
 	public void revertBuff()//auto called by tickBuff when duration is up
 	{
-		if(user.attackType == 0)
-			user.stats [4] = (int)(user.stats [4] / percentBoost);
-		else if (user.attackType == 1)
-			user.stats [7] = (int)(user.stats [7] / percentBoost);
-		else//buff both phys and magic at half effectiveness each
-		{
-			user.stats [4] = (int)(user.stats [4] / (percentBoost/2));
-			user.stats [7] = (int)(user.stats [7] / (percentBoost/2));
-		}
+		user.stats [4] -= statChange;
+		user.stats [7] -= statChangeTwo;
 	}
 }

@@ -5,8 +5,8 @@ public class healUpBuff : buffClass {//buffs healing DONE to user
 
 
 	// Use this for initialization
-	void Start (int duration,baseClass user,double percentBoost) {
-		base.Start(duration,true, true,user);
+	void Start (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
+		base.Start(duration,true, true,user,7,isBuffed,isDebuffed);
 		this.percentBoost = percentBoost;
 	}
 
@@ -26,6 +26,6 @@ public class healUpBuff : buffClass {//buffs healing DONE to user
 
 	public void revertBuff()//auto called by tickBuff when duration is up
 	{
-		user.healMultiplier = (float)(user.healMultiplier / percentBoost);
+		user.healMultiplier = 1;
 	}
 }

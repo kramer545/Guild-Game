@@ -6,7 +6,7 @@ public class allBuff : buffClass {//slightly buffs all users stats (atk/magic is
 	int [] statChange = new int[6];
 	// Use this for initialization
 	void Start (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
-		base.Start(duration,true, true,user);
+		base.Start(duration,true, true,user,1,isBuffed,isDebuffed);
 		this.percentBoost = percentBoost;
 	}
 
