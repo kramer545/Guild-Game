@@ -48,6 +48,7 @@
      <Compile Include="Assets\Scripts\BattleManager.cs" />
      <Compile Include="Assets\Scripts\Warrior.cs" />
      <Compile Include="Assets\Scripts\allyClass.cs" />
+     <Compile Include="Assets\Scripts\armorClass.cs" />
      <Compile Include="Assets\Scripts\baseClass.cs" />
      <Compile Include="Assets\Scripts\buffClasses\allBuff.cs" />
      <Compile Include="Assets\Scripts\buffClasses\allDebuff.cs" />
@@ -72,6 +73,8 @@
      <Compile Include="Assets\Scripts\buffClasses\spdDebuff.cs" />
      <Compile Include="Assets\Scripts\buffClasses\speedBuff.cs" />
      <Compile Include="Assets\Scripts\enemyClass.cs" />
+     <Compile Include="Assets\Scripts\gearClass.cs" />
+     <Compile Include="Assets\Scripts\shieldClass.cs" />
      <Compile Include="Assets\Scripts\weaponClass.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

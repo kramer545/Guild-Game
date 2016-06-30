@@ -3,18 +3,19 @@ using System.Collections;
 
 public class weaponClass : gearClass {
 
-	public int physDmg;
-	public int magDmg;
-	public int accuracy;
-	public int weaponType;
+	public int blockBonus;
+	public int physDef;
+	public int magDef;
 
 	// Use this for initialization
-	public void Start (int rarity,string name,int lvlReq,int[] bonusStats,int physDmg,int magDmg,int accuracy,int weaponType) {
+	public void Start (int rarity,string name,int lvlReq,int[] bonusStats,int physDmg,int magDmg,int blockBonus,int physDef,int magDef) {
 		base.Start(rarity,name,lvlReq,bonusStats);
 		this.physDmg = physDmg;
 		this.magDmg = magDmg;
-		this.accuracy = accuracy;
-		this.weaponType = weaponType;
+		this.accuracy = 0;//not used in accuracy calculations
+		this.weaponType = 5;//TODO number weapon types, change this number to the shield type
+		this.physDef = physDef;
+		this.magDef = magDef;
 	}
 
 	// Update is called once per frame
