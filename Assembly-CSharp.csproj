@@ -48,7 +48,6 @@
      <Compile Include="Assets\Scripts\BattleManager.cs" />
      <Compile Include="Assets\Scripts\Warrior.cs" />
      <Compile Include="Assets\Scripts\allyClass.cs" />
-     <Compile Include="Assets\Scripts\armorClass.cs" />
      <Compile Include="Assets\Scripts\baseClass.cs" />
      <Compile Include="Assets\Scripts\buffClasses\allBuff.cs" />
      <Compile Include="Assets\Scripts\buffClasses\allDebuff.cs" />
@@ -72,10 +71,13 @@
      <Compile Include="Assets\Scripts\buffClasses\sleepDebuff.cs" />
      <Compile Include="Assets\Scripts\buffClasses\spdDebuff.cs" />
      <Compile Include="Assets\Scripts\buffClasses\speedBuff.cs" />
+     <Compile Include="Assets\Scripts\dungeonClasses\baseDungeon.cs" />
+     <Compile Include="Assets\Scripts\dungeonClasses\testDungeon.cs" />
      <Compile Include="Assets\Scripts\enemyClass.cs" />
-     <Compile Include="Assets\Scripts\gearClass.cs" />
-     <Compile Include="Assets\Scripts\shieldClass.cs" />
-     <Compile Include="Assets\Scripts\weaponClass.cs" />
+     <Compile Include="Assets\Scripts\gearClasses\armorClass.cs" />
+     <Compile Include="Assets\Scripts\gearClasses\gearClass.cs" />
+     <Compile Include="Assets\Scripts\gearClasses\shieldClass.cs" />
+     <Compile Include="Assets\Scripts\gearClasses\weaponClass.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

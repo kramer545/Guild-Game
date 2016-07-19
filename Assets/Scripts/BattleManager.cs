@@ -4,31 +4,35 @@ using System;
 
 public class BattleManager : MonoBehaviour  {
 
-	public baseClass[] party;
-	public baseClass[] enemys;
+	public baseClass[] party = new baseClass[5];
+	public baseClass[] enemys = new baseClass[5];
 	//split enemys into subsections for tactics
-	public baseClass[] dps;
-	public baseClass[] healers;
-	public baseClass[] supports;
-	public baseClass[] tanks;
+	public baseClass[] dps = new baseClass[5];
+	public baseClass[] healers = new baseClass[5];
+	public baseClass[] supports = new baseClass[5];
+	public baseClass[] tanks = new baseClass[5];
 
 	public baseClass targetEnemy;
 	public baseClass targetThreat;
 	public int command;
-	Queue <baseClass> turnOrder;
+	Queue <baseClass> turnOrder = new Queue<baseClass>();
 	baseClass curUnit;
-	bool nextTurn;//used to start the next turn/units actions
+	public bool nextTurn;//used to create the next turn/units actions
 	bool battleOver;
 
 	// Use this for initialization 
-	void Start () {
+	void Start(){
+		
+	}
+
+	public void create () {
 		nextTurn = false;
 		battleOver = false;
-		applyPassives();//start with inital buffs/passive effects
+		applyPassives();//create with inital buffs/passive effects
 		makeTurnOrder();
 		command = 0;//Auto act
 		//load art/music assets
-		//start turns
+		//create turns
 		nextTurn = true;
 	}
 	
@@ -38,9 +42,13 @@ public class BattleManager : MonoBehaviour  {
 		{
 			nextTurn = false;
 			curUnit = turnOrder.Dequeue();
+			Debug.Log(curUnit.charName + "'s turn ");
 			curUnit.action();
 			if (turnOrder.Count < 8)
+			{
 				makeTurnOrder();
+			}
+			Debug.Log (nextTurn);
 			//curUnit.action will set nextTurn to true when it is done(has art efffects/etc to do)
 		}
 
@@ -54,12 +62,15 @@ public class BattleManager : MonoBehaviour  {
 	{
 		foreach (baseClass x in party)
 		{
-			x.startingBuff();
+			if(x!=null)
+				x.createingBuff ();
 		}
 
 		foreach (baseClass x in enemys)
 		{
-			x.startingBuff();
+			if (x == null)
+				continue;
+			x.createingBuff();
 			int a = 0;
 			int b = 0;
 			int c = 0;
@@ -101,6 +112,8 @@ public class BattleManager : MonoBehaviour  {
 		{
 			foreach(baseClass x in party)
 			{
+				if (x == null)
+					continue;
 				if (x.IncrementCT ())//if CT over 100, add to sameCT
 				{
 					sameCT [z] = x;
@@ -109,6 +122,8 @@ public class BattleManager : MonoBehaviour  {
 			}
 			foreach(baseClass x in enemys)
 			{
+				if (x == null)
+					continue;
 				if(x.IncrementCT())
 				{
 					sameCT [z] = x;
@@ -118,7 +133,7 @@ public class BattleManager : MonoBehaviour  {
 			if(sameCT[0] != null)
 			{
 				Array.Sort (sameCT, new CTComparer());
-				for (int x = 0;x<party.Length + enemys.Length;x++)
+				for (int x = 0;x<sameCT.Length;x++)
 				{
 					if (sameCT [x] == null)
 						break;
@@ -134,6 +149,11 @@ public class BattleManager : MonoBehaviour  {
 	{
 		public int Compare(baseClass x, baseClass y)
 		{
+			if (x == null){
+				return -1;
+			}
+			if (y == null)
+				return 1;
 			if (x.stats [10] >= y.stats [10])
 				return 1;
 			else
@@ -249,7 +269,7 @@ public class BattleManager : MonoBehaviour  {
 			turnOrder.Enqueue (tempOrder.Dequeue());
 		if (turnOrder.Count < 8)//increment turn order up to at least 8
 			makeTurnOrder ();
-		Debug.Log (unit.name + " is dead");
+		Debug.Log (unit.charName + " is dead");
 		unit.onDeath ();
 		return;
 	}
@@ -322,15 +342,21 @@ public class BattleManager : MonoBehaviour  {
 		if(ally)//search enemys
 		{
 			foreach (baseClass x in enemys) {
+				if (x == null)
+					continue;
 				if ((x.stats [2] - (dmg - x.armor)) <= 0)
 					return x;
 			}
 		}
 		else//search party
+		{
 			foreach (baseClass x in party) {
+				if (x == null)
+					continue;
 				if ((x.stats [2] - (dmg - x.armor)) <= 0)
 					return x;
 			}
+		}
 		return null;
 	}
 

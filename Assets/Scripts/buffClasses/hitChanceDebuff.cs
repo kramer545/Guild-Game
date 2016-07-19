@@ -7,8 +7,8 @@ public class hitChanceDebuff : buffClass {
 	public int bonus = 0;
 
 	// Use this for initialization
-	void Start (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
-		base.Start(duration,true, true,user,18,isBuffed,isDebuffed);
+	void create (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
+		base.create(duration,true, true,user,18,isBuffed,isDebuffed);
 		this.percentBoost = percentBoost;
 	}
 

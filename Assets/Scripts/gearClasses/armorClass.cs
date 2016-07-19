@@ -9,8 +9,8 @@ public class armorClass : gearClass {
 	public int armorType;
 
 	// Use this for initialization
-	public void Start (int rarity,string name,int lvlReq,int[] bonusStats,int physDef,int magDef,int dodgeBonus,int armorType) {
-		base.Start(rarity,name,lvlReq,bonusStats);
+	public void create (int rarity,string name,int lvlReq,int[] bonusStats,int physDef,int magDef,int dodgeBonus,int armorType) {
+		base.create(rarity,name,lvlReq,bonusStats);
 		this.physDef = physDef;
 		this.magDef = magDef;
 		this.dodgeBonus = dodgeBonus;

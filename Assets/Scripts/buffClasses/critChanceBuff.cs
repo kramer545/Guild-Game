@@ -6,8 +6,8 @@ public class critChanceBuff : buffClass {//buffs crit chance for user
 	public const int BASE_CRIT = 10;
 	public int bonus = 0;
 	// Use this for initialization
-	void Start (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
-		base.Start(duration,true, true,user,2,isBuffed,isDebuffed);
+	void create (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
+		base.create(duration,true, true,user,2,isBuffed,isDebuffed);
 		this.percentBoost = percentBoost;
 	}
 

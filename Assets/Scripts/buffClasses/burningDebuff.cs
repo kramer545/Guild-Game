@@ -5,8 +5,8 @@ public class burningDebuff : buffClass {//deals some dmg over a short time
 
 	bool firstRun = true;
 	// Use this for initialization
-	void Start (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
-		base.Start(duration,false, false,user,14,isBuffed,isDebuffed);
+	void create (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
+		base.create(duration,false, false,user,14,isBuffed,isDebuffed);
 		this.percentBoost = percentBoost;
 	}
 

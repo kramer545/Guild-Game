@@ -8,7 +8,7 @@ public class Warrior : allyClass {
 	const int DeterminedSkillThreat = 30;
 
 	// Use this for initialization
-	void Start () {
+	void create () {
 		charName = "Test McTestFace";
 		className = "Warrior";
 		stats [0] = 3;
@@ -31,7 +31,7 @@ public class Warrior : allyClass {
 	
 	}
 
-	public void startingBuff()//apply skill based on role
+	public void createingBuff()//apply skill based on role
 	{
 		if((role == 1) || (role == 0))//if dps main role
 		{

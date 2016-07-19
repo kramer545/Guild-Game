@@ -2,11 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class baseClass : MonoBehaviour {
+public class baseClass {
 
 	public string charName;
 	public string className;
-	public int[] stats;
+	public int[] stats = new int[11];
+	public int[] baseStats = new int[11];
 	public int role;
 	public int multiplier;
 	public int maxHp;
@@ -32,11 +33,10 @@ public class baseClass : MonoBehaviour {
 	public bool skillActivated;
 	public float physMult;
 	public float magMult;
-	public weaponClass weapon;
 	public int attackType;//0 = phys, 1 = magic, anything else is both
 	public const float HEALING_MULTIPLIER = 5;
 	public bool healerSubclass;
-	public List<buffClass> buffs;
+	public List<buffClass> buffs = new List<buffClass>();
 	public float healMultiplier = 1;
 	public bool lifeSteal = false;
 	public const double LIFE_STEAL_PERCENT = 0.2;//20%
@@ -48,8 +48,18 @@ public class baseClass : MonoBehaviour {
 	public bool isSleeping = false;
 
 	// Use this for initialization
-	void Start () {
-		hitChance = weapon.accuracy;
+	public void create (string name, int[] stats, int role,int attackType, bool friendly) {
+		charName = name;
+		this.stats = stats;
+		this.role = role;
+		this.friendly = friendly;
+		this.attackType = attackType;
+		maxHp = stats [2];
+		maxMana = stats [3];
+		baseStats = stats;
+		manager = (GameObject.FindGameObjectWithTag ("battleManager")).GetComponent<BattleManager> ();
+		if (manager == null)
+			Debug.Log ("FUCK ME");
 	}
 	
 	// Update is called once per frame
@@ -77,13 +87,16 @@ public class baseClass : MonoBehaviour {
 			return false;//false if CT cap not reached
 	}
 
-	public void startingBuff()
+	public void createingBuff()
 	{
-		//buffs/debuffs applied automatically at start of battle, ex: passive effects
+		//buffs/debuffs applied automatically at create of battle, ex: passive effects
+		return;
 	}
 
 	public void action()
 	{
+		Debug.Log ("TEST 2");
+		baseClass oneShot = manager.instaKillCheck (this.dmg, friendly);
 		if(defended)
 		{
 			defended = false;
@@ -97,15 +110,18 @@ public class baseClass : MonoBehaviour {
 
 		if(skillActivated)//TODO figuare this out!
 		{
-			
+			oneShot = null;
+			manager.nextTurn = true;
+			return;
 		}
 
 		else
 		{
 			if(role < 8)//DPS/Tank main
 			{
-				baseClass oneShot = manager.instaKillCheck (this.dmg, friendly);
-				if (oneShot != null)
+				if (manager == null)
+					Debug.Log ("Manager is Null");
+				if(oneShot != null)
 				{
 					oneShot.attacked (this);
 				}
@@ -129,7 +145,6 @@ public class baseClass : MonoBehaviour {
 
 			else if ((role >= 8) && (role < 12))//Healer main
 			{
-				baseClass oneShot = manager.instaKillCheck (this.dmg, friendly);
 				if(manager.allyHealthCheck(this,friendly,80))//if true, ally was healed
 				{
 					return;
@@ -150,7 +165,6 @@ public class baseClass : MonoBehaviour {
 
 			else//Support main
 			{
-				baseClass oneShot = manager.instaKillCheck (this.dmg, friendly);
 				if(role == 15)//healer subclass
 				{
 					if (manager.allyHealthCheck(this,friendly,65))
@@ -180,6 +194,8 @@ public class baseClass : MonoBehaviour {
 				}
 			}
 		}
+		oneShot = null;
+		manager.nextTurn = true;
 		//depends on class, role and situation
 		//what happens on this units turn
 	}
@@ -207,53 +223,36 @@ public class baseClass : MonoBehaviour {
 		if (buffed)
 			lifeStealAmount += LIFE_STEAL_BONUS;
 	}
+
+	public int dmgCalc()
+	{
+		return dmg;
+	}
 		
 
 	public void attacked(baseClass attacker)
 	{
 		int rand = (int)Random.Range (0, 100);
-		int dmg;
+		int dmg = attacker.dmgCalc();
+		string attackMsg = attacker.charName + " attacked "+ this.charName+", ";
 
 		if(barrierCharges > 0)
 		{
-			Debug.Log ("Attack Absorbed");
+			Debug.Log (attackMsg + "attack was absorbed by barrier");
 			barrierCharges--;
 		}
+		Debug.Log (rand);
 		if((rand >= (attacker.hitChance - dodgeChance)) && (attacker.attackType != 1) && (!isSleeping))//dodging, no dmg, can't dodge magic
 		{
-			Debug.Log ("Attack Dodged");
+			Debug.Log (attackMsg + "attack was dodged ");
 			//TODO print dodge statement/animation
 			//no dmg done
-		}
-
-		//calculating dmg stage
-		if(attacker.attackType == 0)//phys attack
-		{
-			dmg =(int)(((attacker.stats [4] * attacker.physMult) + attacker.weapon.physDmg) - stats [5]);
-			if (dmg < (attacker.stats [0] * 10))//if dmg is below attacker level times 10, set it to min dmg
-				dmg = (attacker.stats [0] * 10);
-
-		}
-		else if (attacker.attackType == 1)//magic attack
-		{
-			dmg = (int)(((attacker.stats [7] * attacker.magMult) + attacker.weapon.magDmg) - stats [8]);
-			if (dmg < (attacker.stats [0] * 10))//if dmg is below attacker level times 10, set it to min dmg
-				dmg = (attacker.stats [0] * 10);
-		}
-		else//both phys and magic
-		{
-			dmg = (int)(((attacker.stats [4] * attacker.physMult) + attacker.weapon.physDmg) - stats [5]);
-			if (dmg < 0)//if phys dmg is below zero, set to min dmg
-				dmg = (int)((attacker.stats [0] * 10) / 2);
-			if ((((attacker.stats [7] * attacker.magMult) + attacker.weapon.magDmg) - stats [8]) > 0)
-				dmg += (int)(((attacker.stats [7] * attacker.magMult) + attacker.weapon.magDmg) - stats [8]);
-			else
-				dmg +=(int)((attacker.stats [0] * 10) / 2);
 		}
 
 		//checking for dodges, blocks and crits, then applys dmg
 		if ((rand < blockChance) && (!isSleeping))//blocking, reduces dmg
 		{
+			Debug.Log (attackMsg + "attack was blocked");
 			rand = (int)Random.Range (0, 100);
 			if (attacker.attackType == 2)//blocking magic is only 50% effective
 			{
@@ -269,6 +268,7 @@ public class baseClass : MonoBehaviour {
 			{
 				if(rand < attacker.critChance)//if enemy crits
 				{
+					Debug.Log (attackMsg + "Enemy Crit");
 					stats [2] = (stats [2] - (int)((dmg * attacker.critDmg) / BLOCK_REDUCTION));
 					if(attacker.lifeSteal){
 						attacker.stats [2] += (int)(dmg * attacker.critDmg * LIFE_STEAL_PERCENT);
@@ -278,6 +278,7 @@ public class baseClass : MonoBehaviour {
 				}
 				else
 				{
+					Debug.Log (attackMsg);
 					stats [2] = (stats [2] - (int)((dmg) / BLOCK_REDUCTION));
 					if(attacker.lifeSteal){
 						attacker.stats [2] += (int)((dmg / BLOCK_REDUCTION) * LIFE_STEAL_PERCENT);
@@ -293,6 +294,7 @@ public class baseClass : MonoBehaviour {
 			rand = (int)Random.Range (0, 100);
 			if(((rand < attacker.critChance)|| (isSleeping)) && (attacker.attackType != 2))//if enemy crits(cant crit if magic attack)
 			{
+				Debug.Log (attackMsg + "Enemy Crit");
 				stats [2] -= dmg*attacker.critDmg;
 				if(attacker.lifeSteal){
 					attacker.stats [2] += (int)(dmg * attacker.critDmg * LIFE_STEAL_PERCENT);
@@ -302,7 +304,8 @@ public class baseClass : MonoBehaviour {
 			}
 			else
 			{
-				stats [2] -= dmg;
+				Debug.Log (attackMsg);
+				stats [2] = dmg;
 				if(attacker.lifeSteal){
 					attacker.stats [2] += (int)(dmg * LIFE_STEAL_PERCENT);
 					manager.overHealCheck (attacker);
@@ -310,5 +313,6 @@ public class baseClass : MonoBehaviour {
 				manager.deathCheck (this);
 			}
 		}
+		Debug.Log (charName + " has " + stats [2] + " HP left");
 	}
 }

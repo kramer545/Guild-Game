@@ -9,8 +9,8 @@ public class weaponClass : gearClass {
 	public int weaponType;
 
 	// Use this for initialization
-	public void Start (int rarity,string name,int lvlReq,int[] bonusStats,int physDmg,int magDmg,int accuracy,int weaponType) {
-		base.Start(rarity,name,lvlReq,bonusStats);
+	public void create (int rarity,string name,int lvlReq,int[] bonusStats,int physDmg,int magDmg,int accuracy,int weaponType) {
+		base.create(rarity,name,lvlReq,bonusStats);
 		this.physDmg = physDmg;
 		this.magDmg = magDmg;
 		this.accuracy = accuracy;

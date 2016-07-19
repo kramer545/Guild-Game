@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class gearClass : MonoBehaviour {
+public class gearClass {
 
 	public int rarity;
 	public string name;
-	public int[] bonusStats;
+	public int[] bonusStats = new int[11];
 	public int lvlReq;
 
 	// Use this for initialization
-	public void Start (int rarity,string name,int lvlReq,int[] bonusStats) {
+	public void create (int rarity,string name,int lvlReq,int[] bonusStats) {
 		this.rarity = rarity;
 		this.name = name;
 		this.lvlReq = lvlReq;

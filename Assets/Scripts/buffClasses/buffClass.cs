@@ -15,7 +15,7 @@ public class buffClass : MonoBehaviour {
 	public int buffNum;
 
 	// Use this for initialization
-	public void Start (int duration,bool isBuff,bool oneTime,baseClass user,int buffNum) {
+	public void create (int duration,bool isBuff,bool oneTime,baseClass user,int buffNum) {
 		this.duration = duration;
 		this.isBuff = isBuff;
 		this.oneTime = oneTime;
@@ -25,7 +25,7 @@ public class buffClass : MonoBehaviour {
 			oneTimeBuff ();
 	}
 
-	public void Start (int duration,bool isBuff,bool oneTime,baseClass user,int buffNum,bool isBuffed,bool isDebuffed) {
+	public void create (int duration,bool isBuff,bool oneTime,baseClass user,int buffNum,bool isBuffed,bool isDebuffed) {
 		this.duration = duration;
 		this.isBuff = isBuff;
 		this.oneTime = oneTime;

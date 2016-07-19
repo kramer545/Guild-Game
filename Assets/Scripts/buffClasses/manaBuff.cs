@@ -5,8 +5,8 @@ public class manaBuff : buffClass {//returns percent of max HP to user
 
 	bool firstRun = true;
 	// Use this for initialization
-	void Start (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
-		base.Start(duration,true, false,user,10,isBuffed,isDebuffed);
+	void create (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
+		base.create(duration,true, false,user,10,isBuffed,isDebuffed);
 		this.percentBoost = percentBoost;
 	}
 

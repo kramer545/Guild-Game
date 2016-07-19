@@ -5,8 +5,8 @@ public class spdDebuff : buffClass {//debuffs spd for user
 
 
 	// Use this for initialization
-	void Start (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
-		base.Start(duration,false, true,user,21,isBuffed,isDebuffed);
+	void create (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
+		base.create(duration,false, true,user,21,isBuffed,isDebuffed);
 		this.percentBoost = percentBoost;
 	}
 

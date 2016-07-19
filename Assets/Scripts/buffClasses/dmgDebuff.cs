@@ -6,8 +6,8 @@ public class dmgDebuff : buffClass {//debuffs phys/magic dmg for user
 	int statChangeTwo;
 
 	// Use this for initialization
-	void Start (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
-		base.Start(duration,true, true,user,16,isBuffed,isDebuffed);
+	void create (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
+		base.create(duration,true, true,user,16,isBuffed,isDebuffed);
 		this.percentBoost = percentBoost;
 	}
 
