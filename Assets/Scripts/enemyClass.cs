@@ -14,9 +14,8 @@ public class enemyClass : baseClass {
 		dmg = 10;
 	}
 
-	new public void action()//default to attack highest threat party member
+	public override void action()//default to attack highest threat party member
 	{
-		Debug.Log ("TEST 1");
 		(manager.highestThreat ()).attacked (this);
 		manager.nextTurn = true;
 	}

@@ -48,13 +48,14 @@ public class BattleManager : MonoBehaviour  {
 			{
 				makeTurnOrder();
 			}
-			Debug.Log (nextTurn);
 			//curUnit.action will set nextTurn to true when it is done(has art efffects/etc to do)
 		}
 
 		if (battleOver)
 		{
 			//TODO
+			nextTurn = false;
+			return;
 		}
 	}
 
@@ -258,7 +259,43 @@ public class BattleManager : MonoBehaviour  {
 
 	public void removeUnit(baseClass unit)//remove unit from turn order, likely from death
 	{
+		Debug.Log (unit.charName + " is dead and removed");
 		Queue <baseClass> tempOrder = new Queue<baseClass>();
+		int deadAllys = 0;
+		int deadEnemys = 0;
+		if(unit.friendly)
+		{
+			for(int x = 0;x<5;x++)
+			{
+				if (party [x] == unit)
+					party [x] = null;
+				if (party [x] == null)
+					deadAllys++;
+			}
+		}
+		else
+		{
+			for(int x = 0;x<5;x++)
+			{
+				if (enemys [x] == unit)
+					enemys [x] = null;
+				if (enemys [x] == null)
+					deadEnemys++;
+				if (unit.role < 4) {
+					if (dps [x] == unit)
+						dps [x] = null;
+				} else if (unit.role < 8) {
+					if (tanks [x] == unit)
+						tanks [x] = null;
+				} else if (unit.role < 12) {
+					if (healers [x] == unit)
+						healers [x] = null;	
+				} else {
+					if (supports [x] == unit)
+						supports [x] = null;
+				}
+			}
+		}
 		while (turnOrder.Count > 0)//move turnOrder to temp, removing unit if found
 		{
 			baseClass tempUnit = turnOrder.Dequeue();
@@ -269,8 +306,17 @@ public class BattleManager : MonoBehaviour  {
 			turnOrder.Enqueue (tempOrder.Dequeue());
 		if (turnOrder.Count < 8)//increment turn order up to at least 8
 			makeTurnOrder ();
-		Debug.Log (unit.charName + " is dead");
 		unit.onDeath ();
+		if(deadAllys == 5)
+		{
+			Debug.Log ("Battle Lost");
+			battleOver = true;
+		}
+		else if (deadEnemys == 5)
+		{
+			Debug.Log ("Battle Won");
+			battleOver = true;
+		}
 		return;
 	}
 

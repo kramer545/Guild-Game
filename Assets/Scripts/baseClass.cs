@@ -93,9 +93,8 @@ public class baseClass {
 		return;
 	}
 
-	public void action()
+	public virtual void action()
 	{
-		Debug.Log ("TEST 2");
 		baseClass oneShot = manager.instaKillCheck (this.dmg, friendly);
 		if(defended)
 		{
@@ -241,7 +240,6 @@ public class baseClass {
 			Debug.Log (attackMsg + "attack was absorbed by barrier");
 			barrierCharges--;
 		}
-		Debug.Log (rand);
 		if((rand >= (attacker.hitChance - dodgeChance)) && (attacker.attackType != 1) && (!isSleeping))//dodging, no dmg, can't dodge magic
 		{
 			Debug.Log (attackMsg + "attack was dodged ");
