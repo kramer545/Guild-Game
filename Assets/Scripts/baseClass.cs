@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class baseClass {
+public class baseClass: MonoBehaviour {
 
 	public string charName;
 	public string className;
@@ -46,9 +46,11 @@ public class baseClass {
 	public int hitChance;
 	public int barrierCharges;
 	public bool isSleeping = false;
+	public GameObject unit;
+	public GameObject HpText;
 
 	// Use this for initialization
-	public void create (string name, int[] stats, int role,int attackType, bool friendly) {
+	public void create (string name, int[] stats, int role,int attackType, bool friendly,GameObject unit) {
 		charName = name;
 		this.stats = stats;
 		this.role = role;
@@ -57,9 +59,9 @@ public class baseClass {
 		maxHp = stats [2];
 		maxMana = stats [3];
 		baseStats = stats;
+		this.unit = unit;
 		manager = (GameObject.FindGameObjectWithTag ("battleManager")).GetComponent<BattleManager> ();
-		if (manager == null)
-			Debug.Log ("FUCK ME");
+		HpText.GetComponent<UnityEngine.UI.Text>().text = maxHp + " / " + maxHp;
 	}
 	
 	// Update is called once per frame
@@ -311,6 +313,16 @@ public class baseClass {
 				manager.deathCheck (this);
 			}
 		}
+		HpText.GetComponent<UnityEngine.UI.Text> ().text = "";
+		unit.GetComponent<Animator> ().Play ("attacked");
+		unit.transform.FindChild ("HealthBarFront").transform.localScale = new Vector2 ((float)(stats [2] / maxHp) * 3.3333F, 3.3333F);
+		if ((float)(stats [2] / maxHp) > 0.66)
+			unit.transform.FindChild ("HealthBarFront").GetComponent<SpriteRenderer> ().material.SetColor ("_SpecColor", Color.green);
+		else if ((float)(stats [2] / maxHp) <= 0.66)
+			unit.transform.FindChild ("HealthBarFront").GetComponent<SpriteRenderer> ().material.SetColor ("_SpecColor", Color.yellow);
+		else
+			unit.transform.FindChild ("HealthBarFront").GetComponent<SpriteRenderer> ().material.SetColor ("_SpecColor", Color.red);
+		HpText.GetComponent<UnityEngine.UI.Text>().text = stats[2] + " / " + maxHp;
 		Debug.Log (charName + " has " + stats [2] + " HP left");
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections;
 
 public class testDungeon : baseDungeon {
 
+
 	// Use this for initialization
 	public void Start () {
 		base.create ("TEST", "For Test Purposes", 1, 100, 50);
@@ -39,11 +40,11 @@ public class testDungeon : baseDungeon {
 				stats [9] = 6 + (int)(0.5 * stats [0]);
 				stats [10] = 0;
 				enemy = new enemyClass();
-				enemy.create ("Test DPS", stats, 0,0);
+				enemy.create ("Test DPS", stats, 0,0,enemies[0]);
 				manager.dps [0] = enemy;
 				//dps 2
 				enemy = new enemyClass();
-				enemy.create ("Test DPS 2", stats, 0,0);
+				enemy.create ("Test DPS 2", stats, 0,0,enemies[1]);
 				manager.dps [1] = enemy;
 				//tank
 				stats [0] = 5;
@@ -58,11 +59,11 @@ public class testDungeon : baseDungeon {
 				stats [9] = 7 + (int)(0.5 * stats [0]);
 				stats [10] = 0;
 				enemy = new enemyClass();
-				enemy.create ("Test Tank", stats, 4,0);
+				enemy.create ("Test Tank", stats, 4,0,enemies[2]);
 				manager.tanks[0] = enemy;
 				//tank 2
 				enemy = new enemyClass();
-				enemy.create ("Test Tank 2", stats, 4,0);
+				enemy.create ("Test Tank 2", stats, 4,0,enemies[3]);
 				manager.tanks[1] = enemy;
 				//healer
 				stats [0] = 5;
@@ -77,7 +78,7 @@ public class testDungeon : baseDungeon {
 				stats [9] = 8 + (int)(0.5 * stats [0]);
 				stats [10] = 0;
 				enemy = new enemyClass();
-				enemy.create ("Test healer", stats, 8,0);
+				enemy.create ("Test healer", stats, 8,0,enemies[4]);
 				manager.healers[0] = enemy;
 				manager.enemys [0] = manager.dps [0];
 				manager.enemys [1] = manager.dps [1];
@@ -99,14 +100,14 @@ public class testDungeon : baseDungeon {
 				stats [9] = 6 + (int)(0.5 * stats [0]);
 				stats [10] = 0;
 				ally = new allyClass();
-				ally.create ("Test DPS ally", stats,0, 0);
+				ally.create ("Test DPS ally", stats,0, 0,allies[0]);
 				ally.weaponMain = new weaponClass();
 				ally.weaponMain.create (0, "Test Weapon 1", 0, wStats, 0, 0, 75, 0);
 				ally.updateChar();
 				manager.party [0] = ally;
 				//dps 2
 				ally = new allyClass();
-				ally.create ("Test DPS 2 ally", stats,0, 0);
+				ally.create ("Test DPS 2 ally", stats,0, 0,allies[1]);
 				ally.weaponMain = new weaponClass();
 				ally.weaponMain.create (0, "Test Weapon 1", 0, wStats, 0, 0, 75, 0);
 				ally.updateChar();
@@ -124,14 +125,14 @@ public class testDungeon : baseDungeon {
 				stats [9] = 7 + (int)(0.5 * stats [0]);
 				stats [10] = 0;
 				ally = new allyClass();
-				ally.create ("Test Tank ally", stats,0, 4);
+				ally.create ("Test Tank ally", stats,0, 4,allies[2]);
 				ally.weaponMain = new weaponClass();
 				ally.weaponMain.create (0, "Test Weapon 1", 0, wStats, 0, 0, 75, 0);
 				ally.updateChar();
 				manager.party[2] = ally;
 				//tank 2
 				ally = new allyClass();
-				ally.create ("Test Tank 2 ally", stats,0, 4);
+				ally.create ("Test Tank 2 ally", stats,0, 4,allies[3]);
 				ally.weaponMain = new weaponClass();
 				ally.weaponMain.create (0, "Test Weapon 1", 0, wStats, 0, 0, 75, 0);
 				ally.updateChar();
@@ -149,7 +150,7 @@ public class testDungeon : baseDungeon {
 				stats [9] = 8 + (int)(0.5 * stats [0]);
 				stats [10] = 0;
 				ally = new allyClass();
-				ally.create ("Test healer ally", stats,0,8);
+				ally.create ("Test healer ally", stats,0,8,allies[4]);
 				ally.weaponMain = new weaponClass();
 				ally.weaponMain.create (0, "Test Weapon 1", 0, wStats, 0, 0, 75, 0);
 				ally.updateChar();

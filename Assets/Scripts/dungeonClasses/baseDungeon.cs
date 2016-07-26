@@ -14,6 +14,9 @@ public class baseDungeon : MonoBehaviour {
 	public enemyClass[] supports;
 	public BattleManager manager;
 
+	public GameObject[] enemies = new GameObject[5];
+	public GameObject[] allies = new GameObject[5];
+
 	// Use this for initialization
 	public void create (string name, string desc,int low,int high,int avg) {
 		this.name = name;
