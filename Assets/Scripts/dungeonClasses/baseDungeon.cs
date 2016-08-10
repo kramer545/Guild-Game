@@ -8,14 +8,14 @@ public class baseDungeon : MonoBehaviour {
 	public int lowLvl;
 	public int highLvl;
 	public int avgLvl;
-	public enemyClass[] dps;
-	public enemyClass[] tanks;
-	public enemyClass[] healers;
-	public enemyClass[] supports;
+	public enemyClass[] dps = new enemyClass[5];
+	public enemyClass[] tanks = new enemyClass[5];
+	public enemyClass[] healers = new enemyClass[5];
+	public enemyClass[] supports = new enemyClass[5];
 	public BattleManager manager;
 
-	public GameObject[] enemies = new GameObject[5];
-	public GameObject[] allies = new GameObject[5];
+	public enemyClass[] enemies = new  enemyClass[5];
+	public allyClass[] allies = new allyClass[5];
 
 	// Use this for initialization
 	public void create (string name, string desc,int low,int high,int avg) {

@@ -7,10 +7,15 @@ public class BattleManager : MonoBehaviour  {
 	public baseClass[] party = new baseClass[5];
 	public baseClass[] enemys = new baseClass[5];
 	//split enemys into subsections for tactics
-	public baseClass[] dps = new baseClass[5];
-	public baseClass[] healers = new baseClass[5];
-	public baseClass[] supports = new baseClass[5];
-	public baseClass[] tanks = new baseClass[5];
+	public allyClass[] dps = new allyClass[5];
+	public allyClass[] healers = new allyClass[5];
+	public allyClass[] supports = new allyClass[5];
+	public allyClass[] tanks = new allyClass[5];
+
+	public enemyClass[] enemyDps = new enemyClass[5];
+	public enemyClass[] enemyHealers = new enemyClass[5];
+	public enemyClass[] enemySupports = new enemyClass[5];
+	public enemyClass[] enemyTanks = new enemyClass[5];
 
 	public baseClass targetEnemy;
 	public baseClass targetThreat;
@@ -19,10 +24,11 @@ public class BattleManager : MonoBehaviour  {
 	baseClass curUnit;
 	public bool nextTurn;//used to create the next turn/units actions
 	bool battleOver;
+	public GameObject DmgText;
 
 	// Use this for initialization 
 	void Start(){
-		
+		DmgText.GetComponent<UnityEngine.UI.Text> ().text = "";
 	}
 
 	public void create () {
@@ -33,7 +39,7 @@ public class BattleManager : MonoBehaviour  {
 		command = 0;//Auto act
 		//load art/music assets
 		//create turns
-		nextTurn = true;
+		StartCoroutine (turnWait ());
 	}
 	
 	// Update is called once per frame
@@ -42,12 +48,12 @@ public class BattleManager : MonoBehaviour  {
 		{
 			nextTurn = false;
 			curUnit = turnOrder.Dequeue();
-			Debug.Log(curUnit.charName + "'s turn ");
 			curUnit.action();
 			if (turnOrder.Count < 8)
 			{
 				makeTurnOrder();
 			}
+			StartCoroutine (turnWait());
 			//curUnit.action will set nextTurn to true when it is done(has art efffects/etc to do)
 		}
 
@@ -58,6 +64,13 @@ public class BattleManager : MonoBehaviour  {
 			return;
 		}
 	}
+
+	IEnumerator<UnityEngine.WaitForSeconds> turnWait()
+	{
+		yield return new WaitForSeconds (1);
+		nextTurn = true;
+	}
+
 
 	void applyPassives()
 	{
@@ -261,6 +274,7 @@ public class BattleManager : MonoBehaviour  {
 	{
 		Debug.Log (unit.charName + " is dead and removed");
 		Queue <baseClass> tempOrder = new Queue<baseClass>();
+		unit.stats [2] = 0;
 		int deadAllys = 0;
 		int deadEnemys = 0;
 		if(unit.friendly)
@@ -322,9 +336,17 @@ public class BattleManager : MonoBehaviour  {
 
 	public baseClass highestThreat()
 	{
-		allyClass max = (allyClass)party [0];
+		allyClass max = null;
+		foreach(allyClass x in party)//loop until find max that isnt null
+		{
+			max = x;
+			if (max != null)
+				break;
+		}
 		foreach (allyClass x in party)
 		{
+			if (x == null)
+				continue;
 			if (x.threat > max.threat)
 				max = x;
 		}
@@ -339,6 +361,8 @@ public class BattleManager : MonoBehaviour  {
 		{
 			foreach(baseClass x in party)
 			{
+				if (x == null)
+					continue;
 				if((x.stats[2] <= x.maxHp - heal) || ((((x.stats[2]/(x.maxHp))*100) < healPercent)))
 				{
 					if (lowest == null)
@@ -361,6 +385,8 @@ public class BattleManager : MonoBehaviour  {
 		{
 			foreach(baseClass x in enemys)
 			{
+				if (x == null)
+					continue;
 				if((x.stats[2] <= x.maxHp - heal) || ((((x.stats[2]/(x.maxHp))*100) < healPercent)))
 				{
 					if (lowest == null)
@@ -418,7 +444,7 @@ public class BattleManager : MonoBehaviour  {
 
 	public bool overHealCheck(baseClass unit)
 	{
-		if (unit.stats[2] >= unit.maxHp)
+		if (unit.stats[2] > unit.maxHp)
 		{
 			unit.stats [2] = unit.maxHp;
 			return true;
@@ -433,6 +459,11 @@ public class BattleManager : MonoBehaviour  {
 			return true;
 		}
 		return false;
+	}
+
+	public void printDmg(int dmg)
+	{
+		DmgText.GetComponent<UnityEngine.UI.Text> ().text = "-"+dmg;
 	}
 
 }

@@ -431,7 +431,7 @@ PlayerSettings:
   - XboxOne::enus
   XboxOne::enus: 1
   stringPropertyNames: []
-  cloudProjectId: 
-  projectName: 
-  organizationId: 
+  cloudProjectId: 4aa88bd3-3a5c-49f2-a8a5-1a00e9b8008c
+  projectName: Guild Game
+  organizationId: ryan-kramer-2521389
   cloudEnabled: 0

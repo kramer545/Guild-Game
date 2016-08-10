@@ -50,7 +50,7 @@ public class baseClass: MonoBehaviour {
 	public GameObject HpText;
 
 	// Use this for initialization
-	public void create (string name, int[] stats, int role,int attackType, bool friendly,GameObject unit) {
+	public void create (string name, int[] stats, int role,int attackType, bool friendly) {
 		charName = name;
 		this.stats = stats;
 		this.role = role;
@@ -59,9 +59,7 @@ public class baseClass: MonoBehaviour {
 		maxHp = stats [2];
 		maxMana = stats [3];
 		baseStats = stats;
-		this.unit = unit;
-		manager = (GameObject.FindGameObjectWithTag ("battleManager")).GetComponent<BattleManager> ();
-		HpText.GetComponent<UnityEngine.UI.Text>().text = maxHp + " / " + maxHp;
+		HpText.GetComponent<UnityEngine.UI.Text>().text = (maxHp + " / " + maxHp);
 	}
 	
 	// Update is called once per frame
@@ -196,7 +194,6 @@ public class baseClass: MonoBehaviour {
 			}
 		}
 		oneShot = null;
-		manager.nextTurn = true;
 		//depends on class, role and situation
 		//what happens on this units turn
 	}
@@ -247,22 +244,22 @@ public class baseClass: MonoBehaviour {
 			Debug.Log (attackMsg + "attack was dodged ");
 			//TODO print dodge statement/animation
 			//no dmg done
+			return;
 		}
 
 		//checking for dodges, blocks and crits, then applys dmg
 		if ((rand < blockChance) && (!isSleeping))//blocking, reduces dmg
 		{
 			Debug.Log (attackMsg + "attack was blocked");
-			rand = (int)Random.Range (0, 100);
 			if (attacker.attackType == 2)//blocking magic is only 50% effective
 			{
 				stats [2] -= dmg/(BLOCK_REDUCTION/2);
+				manager.printDmg ((int)(dmg / (BLOCK_REDUCTION / 2)));
 				if(attacker.lifeSteal){
 					attacker.stats [2] += (int)((dmg / (BLOCK_REDUCTION / 2)) * LIFE_STEAL_PERCENT);
 					manager.overHealCheck (attacker);
 				}
 				manager.deathCheck (this);
-
 			}
 			else
 			{
@@ -270,6 +267,7 @@ public class baseClass: MonoBehaviour {
 				{
 					Debug.Log (attackMsg + "Enemy Crit");
 					stats [2] = (stats [2] - (int)((dmg * attacker.critDmg) / BLOCK_REDUCTION));
+					manager.printDmg ((int)((dmg * attacker.critDmg) / BLOCK_REDUCTION));
 					if(attacker.lifeSteal){
 						attacker.stats [2] += (int)(dmg * attacker.critDmg * LIFE_STEAL_PERCENT);
 						manager.overHealCheck (attacker);
@@ -280,6 +278,7 @@ public class baseClass: MonoBehaviour {
 				{
 					Debug.Log (attackMsg);
 					stats [2] = (stats [2] - (int)((dmg) / BLOCK_REDUCTION));
+					manager.printDmg ((int)((dmg) / BLOCK_REDUCTION));
 					if(attacker.lifeSteal){
 						attacker.stats [2] += (int)((dmg / BLOCK_REDUCTION) * LIFE_STEAL_PERCENT);
 						manager.overHealCheck (attacker);
@@ -296,6 +295,7 @@ public class baseClass: MonoBehaviour {
 			{
 				Debug.Log (attackMsg + "Enemy Crit");
 				stats [2] -= dmg*attacker.critDmg;
+				manager.printDmg (dmg*attacker.critDmg);
 				if(attacker.lifeSteal){
 					attacker.stats [2] += (int)(dmg * attacker.critDmg * LIFE_STEAL_PERCENT);
 					manager.overHealCheck (attacker);
@@ -304,8 +304,9 @@ public class baseClass: MonoBehaviour {
 			}
 			else
 			{
-				Debug.Log (attackMsg);
-				stats [2] = dmg;
+				manager.printDmg (dmg);
+				Debug.Log (stats [2]+" "+maxHp);
+				stats [2] -= dmg;
 				if(attacker.lifeSteal){
 					attacker.stats [2] += (int)(dmg * LIFE_STEAL_PERCENT);
 					manager.overHealCheck (attacker);
@@ -314,15 +315,17 @@ public class baseClass: MonoBehaviour {
 			}
 		}
 		HpText.GetComponent<UnityEngine.UI.Text> ().text = "";
-		unit.GetComponent<Animator> ().Play ("attacked");
-		unit.transform.FindChild ("HealthBarFront").transform.localScale = new Vector2 ((float)(stats [2] / maxHp) * 3.3333F, 3.3333F);
-		if ((float)(stats [2] / maxHp) > 0.66)
-			unit.transform.FindChild ("HealthBarFront").GetComponent<SpriteRenderer> ().material.SetColor ("_SpecColor", Color.green);
-		else if ((float)(stats [2] / maxHp) <= 0.66)
-			unit.transform.FindChild ("HealthBarFront").GetComponent<SpriteRenderer> ().material.SetColor ("_SpecColor", Color.yellow);
+		attacker.GetComponent<Animator> ().Play ("attacking");
+		GetComponent<Animator> ().Play ("attacked");
+		Debug.Log (((float)stats [2] / (float)maxHp));
+		this.transform.FindChild ("HealthBarFront").transform.localScale = new Vector2 (((float)stats [2] / (float)maxHp) * 3.3333F, 3.3333F);
+		if (((float)stats [2] / (float)maxHp) > 0.66)
+			this.transform.FindChild ("HealthBarFront").GetComponent<SpriteRenderer> ().material.SetColor ("_SpecColor", Color.green);
+		else if (((float)stats [2] / (float)maxHp) <= 0.66)
+			this.transform.FindChild ("HealthBarFront").GetComponent<SpriteRenderer> ().material.SetColor ("_SpecColor", Color.yellow);
 		else
-			unit.transform.FindChild ("HealthBarFront").GetComponent<SpriteRenderer> ().material.SetColor ("_SpecColor", Color.red);
+			this.transform.FindChild ("HealthBarFront").GetComponent<SpriteRenderer> ().material.SetColor ("_SpecColor", Color.red);
 		HpText.GetComponent<UnityEngine.UI.Text>().text = stats[2] + " / " + maxHp;
-		Debug.Log (charName + " has " + stats [2] + " HP left");
+		Debug.Log (charName + " has " + stats [2] + " HP left, "+ attacker.charName +" did "+dmg+" dmg");
 	}
 }

@@ -7,7 +7,6 @@ public class allyClass : baseClass {
 	public int threat;
 	public const int threatBase = 10;
 	public double threatMultiplier;
-	public int[] baseStats;
 
 	public weaponClass weaponMain;
 	public weaponClass weaponOff;
@@ -23,8 +22,9 @@ public class allyClass : baseClass {
 	public gearClass amulet;
 
 	// Use this for initialization
-	public void create (string name, int[] stats, int role,int attackType,GameObject unit) {
-		base.create( name,stats,role,attackType, true,unit);
+	public void create (string name, int[] stats, int role,int attackType) {
+		base.create( name,stats,role,attackType, true);
+		dmg = 10;
 	}
 
 	public void updateChar()
