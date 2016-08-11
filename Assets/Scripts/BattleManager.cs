@@ -68,6 +68,7 @@ public class BattleManager : MonoBehaviour  {
 	IEnumerator<UnityEngine.WaitForSeconds> turnWait()
 	{
 		yield return new WaitForSeconds (1);
+		DmgText.GetComponent<UnityEngine.UI.Text> ().text = "";
 		nextTurn = true;
 	}
 
@@ -80,7 +81,7 @@ public class BattleManager : MonoBehaviour  {
 				x.createingBuff ();
 		}
 
-		foreach (baseClass x in enemys)
+		foreach (enemyClass x in enemys)
 		{
 			if (x == null)
 				continue;
@@ -96,22 +97,22 @@ public class BattleManager : MonoBehaviour  {
 
 			if(x.role == 0)
 			{
-				dps [a] = x;
+				enemyDps [a] = x;
 				a++;
 			}
 			else if (x.role == 4)
 			{
-				tanks [b] = x;
+				enemyTanks [b] = x;
 				b++;
 			}
 			else if (x.role == 8)
 			{
-				healers [c] = x;
+				enemyHealers [c] = x;
 				c++;
 			}
 			else
 			{
-				supports [d] = x;
+				enemySupports [d] = x;
 				d++;
 			}
 		}
@@ -356,7 +357,7 @@ public class BattleManager : MonoBehaviour  {
 	public bool allyHealthCheck(baseClass healer,bool ally,int healPercent)
 	{
 		baseClass lowest = null;
-		int heal = (int)(healer.stats [7] * baseClass.HEALING_MULTIPLIER);
+		int heal = (int)(healer.stats [7] * healer.HEALING_MULTIPLIER);
 		if(ally)//player party
 		{
 			foreach(baseClass x in party)
@@ -375,8 +376,10 @@ public class BattleManager : MonoBehaviour  {
 				}
 			}
 			if (lowest != null) {
+				Debug.Log (lowest.charName + " had " + lowest.stats [2] + " hp");
 				lowest.stats [2] += heal;
 				overHealCheck (lowest);
+				Debug.Log (healer.charName + " healed " + lowest.charName + " for " + heal);
 				return true;
 			} else
 				return false;
@@ -464,6 +467,12 @@ public class BattleManager : MonoBehaviour  {
 	public void printDmg(int dmg)
 	{
 		DmgText.GetComponent<UnityEngine.UI.Text> ().text = "-"+dmg;
+		DmgText.GetComponent<Animator> ().Play ("dmgText",-1,0);
+	}
+
+	public void clearDmg()
+	{
+		DmgText.GetComponent<UnityEngine.UI.Text> ().text = "";
 	}
 
 }

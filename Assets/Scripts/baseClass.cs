@@ -315,9 +315,8 @@ public class baseClass: MonoBehaviour {
 			}
 		}
 		HpText.GetComponent<UnityEngine.UI.Text> ().text = "";
-		attacker.GetComponent<Animator> ().Play ("attacking");
-		GetComponent<Animator> ().Play ("attacked");
-		Debug.Log (((float)stats [2] / (float)maxHp));
+		attacker.GetComponent<Animator> ().Play ("attacking",-1,0);
+		GetComponent<Animator> ().Play ("attacked",-1,0);
 		this.transform.FindChild ("HealthBarFront").transform.localScale = new Vector2 (((float)stats [2] / (float)maxHp) * 3.3333F, 3.3333F);
 		if (((float)stats [2] / (float)maxHp) > 0.66)
 			this.transform.FindChild ("HealthBarFront").GetComponent<SpriteRenderer> ().material.SetColor ("_SpecColor", Color.green);

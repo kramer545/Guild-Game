@@ -97,8 +97,8 @@ public class testDungeon : baseDungeon {
 				manager.enemyDps [0] = enemies [0];
 				manager.enemyDps [1] = enemies [1];
 				manager.enemyTanks [0] = enemies [2];
-				tanks [1] = enemies [3];
-				healers [0] = enemies [4];
+				manager.enemyTanks [1] = enemies [3];
+				manager.enemyHealers [0] = enemies [4];
 
 				//allys now
 				//dps first
@@ -196,6 +196,11 @@ public class testDungeon : baseDungeon {
 				manager.party[2] = allies [2];
 				manager.party[3] = allies [3];
 				manager.party[4] = allies [4];
+				manager.dps[0] = allies [0];
+				manager.dps [1] = allies [1];
+				manager.tanks [0] = allies [2];
+				manager.tanks [1] = allies [3];
+				manager.healers [0] = allies [4];
 
 				break;
 			}
