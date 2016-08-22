@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class buffClass : MonoBehaviour {
+public class buffClass {
 
 	public bool isBuff;//false if debuff
 	public bool oneTime;//onetime boost, or boost every tick?
+	public bool oneTimeUsed = false;
 	public int duration;
 	public double percentBoost;
 	public baseClass user;
@@ -55,6 +56,8 @@ public class buffClass : MonoBehaviour {
 	public bool tickBuff()
 	{
 		duration--;
+		if (!oneTime)
+			applyBuff ();
 		if (duration <= 0){//returns true to remove buff from unit
 			revertBuff();
 			return true;

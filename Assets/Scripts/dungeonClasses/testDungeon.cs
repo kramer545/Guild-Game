@@ -37,7 +37,7 @@ public class testDungeon : baseDungeon {
 				stats [8] = 4 + (int)(0.25 * stats [0]);
 				stats [9] = 6 + (int)(0.5 * stats [0]);
 				stats [10] = 0;
-				enemies[0].create("Test DPS", stats, 0,0);
+				enemies[0].create("Test DPS", stats, 0,0,0);
 				stats = new int[11];
 				stats [0] = 5;
 				stats [1] = 0;
@@ -51,7 +51,7 @@ public class testDungeon : baseDungeon {
 				stats [9] = 6 + (int)(0.5 * stats [0]);
 				stats [10] = 0;
 				//dps 2
-				enemies[1].create("Test DPS 2", stats, 0,0);
+				enemies[1].create("Test DPS 2", stats, 0,0,0);
 				//tank
 				stats = new int[11];
 				stats [0] = 5;
@@ -65,7 +65,7 @@ public class testDungeon : baseDungeon {
 				stats [8] = 6 + (int)(0.5 * stats [0]);
 				stats [9] = 7 + (int)(0.5 * stats [0]);
 				stats [10] = 0;
-				enemies[2].create("Test tank", stats, 4,0);
+				enemies[2].create("Test tank", stats, 4,0,0);
 				//tank 2
 				stats = new int[11];
 				stats [0] = 5;
@@ -79,7 +79,7 @@ public class testDungeon : baseDungeon {
 				stats [8] = 6 + (int)(0.5 * stats [0]);
 				stats [9] = 7 + (int)(0.5 * stats [0]);
 				stats [10] = 0;
-				enemies[3].create("Test tank 2", stats, 4,0);
+				enemies[3].create("Test tank 2", stats, 4,0,0);
 				//healer
 				stats = new int[11];
 				stats [0] = 5;
@@ -93,7 +93,7 @@ public class testDungeon : baseDungeon {
 				stats [8] = 6 + (int)(0.5 * stats [0]);
 				stats [9] = 8 + (int)(0.5 * stats [0]);
 				stats [10] = 0;
-				enemies[4].create("Test healer", stats, 8,0);
+				enemies[4].create("Test healer", stats, 8,0,0);
 				manager.enemyDps [0] = enemies [0];
 				manager.enemyDps [1] = enemies [1];
 				manager.enemyTanks [0] = enemies [2];
@@ -114,7 +114,7 @@ public class testDungeon : baseDungeon {
 				stats [8] = 4 + (int)(0.25 * stats [0]);
 				stats [9] = 6 + (int)(0.5 * stats [0]);
 				stats [10] = 0;
-				allies[0].create("Test ally dps", stats, 0,0);
+				allies[0].create("Test ally dps", stats, 0,0,0);
 				allies[0].weaponMain = new weaponClass();
 				allies[0].weaponMain.create (0, "Test Weapon 1", 0, wStats, 0, 0, 75, 0);
 				allies[0].updateChar();
@@ -131,7 +131,7 @@ public class testDungeon : baseDungeon {
 				stats [8] = 4 + (int)(0.25 * stats [0]);
 				stats [9] = 6 + (int)(0.5 * stats [0]);
 				stats [10] = 0;
-				allies[1].create("Test ally dps 2", stats, 0,0);
+				allies[1].create("Test ally dps 2", stats, 0,0,0);
 				allies[1].weaponMain = new weaponClass();
 				allies[1].weaponMain.create (0, "Test Weapon 2", 0, wStats, 0, 0, 75, 0);
 				allies[1].updateChar();
@@ -148,7 +148,7 @@ public class testDungeon : baseDungeon {
 				stats [8] = 6 + (int)(0.5 * stats [0]);
 				stats [9] = 7 + (int)(0.5 * stats [0]);
 				stats [10] = 0;
-				allies[2].create("Test ally tank", stats, 4,0);
+				allies[2].create("Test ally tank", stats, 4,0,0);
 				allies[2].weaponMain = new weaponClass();
 				allies[2].weaponMain.create (0, "Test Weapon 1", 0, wStats, 0, 0, 75, 0);
 				allies[2].updateChar();
@@ -164,8 +164,8 @@ public class testDungeon : baseDungeon {
 				stats [7] = 2 + (int)(0.2 * stats [0]);
 				stats [8] = 6 + (int)(0.5 * stats [0]);
 				stats [9] = 7 + (int)(0.5 * stats [0]);
-				stats [10] = 0;
-				allies[3].create("Test ally tank 2", stats, 4,0);
+				stats [10] = 5;
+				allies[3].create("Test support", stats, 12,0,1);
 				allies[3].weaponMain = new weaponClass();
 				allies[3].weaponMain.create (0, "Test Weapon 1", 0, wStats, 0, 0, 75, 0);
 				allies[3].updateChar();
@@ -182,7 +182,7 @@ public class testDungeon : baseDungeon {
 				stats [8] = 6 + (int)(0.5 * stats [0]);
 				stats [9] = 8 + (int)(0.5 * stats [0]);
 				stats [10] = 0;
-				allies[4].create("Test ally healer", stats, 8,0);
+				allies[4].create("Test ally healer", stats, 8,0,0);
 				allies[4].weaponMain = new weaponClass();
 				allies[4].weaponMain.create (0, "Test Weapon 1", 0, wStats, 0, 0, 75, 0);
 				allies[4].updateChar();
@@ -199,7 +199,7 @@ public class testDungeon : baseDungeon {
 				manager.dps[0] = allies [0];
 				manager.dps [1] = allies [1];
 				manager.tanks [0] = allies [2];
-				manager.tanks [1] = allies [3];
+				manager.supports[0] = allies [3];
 				manager.healers [0] = allies [4];
 
 				break;

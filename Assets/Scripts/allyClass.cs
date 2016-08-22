@@ -22,8 +22,8 @@ public class allyClass : baseClass {
 	public gearClass amulet;
 
 	// Use this for initialization
-	public void create (string name, int[] stats, int role,int attackType) {
-		base.create( name,stats,role,attackType, true);
+	public void create (string name, int[] stats, int role,int attackType,int classNum) {
+		base.create( name,stats,role,attackType, true,classNum);
 		dmg = 10;
 	}
 

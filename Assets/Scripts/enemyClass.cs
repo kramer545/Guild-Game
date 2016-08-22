@@ -7,8 +7,8 @@ public class enemyClass : baseClass {
 
 	// Use this for initialization
 
-	public void create (string name,int[] stats,int role,int attackType) {
-		base.create(name,stats,role,attackType, false);
+	public void create (string name,int[] stats,int role,int attackType,int classNum) {
+		base.create(name,stats,role,attackType, false,classNum);
 		//testing purposes, fix after
 		hitChance = 90;
 		dmg = 10;

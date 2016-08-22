@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 public class baseClass: MonoBehaviour {
 
@@ -34,7 +36,7 @@ public class baseClass: MonoBehaviour {
 	public float physMult;
 	public float magMult;
 	public int attackType;//0 = phys, 1 = magic, anything else is both
-	public const float HEALING_MULTIPLIER = 5;
+	public const float HEALING_MULTIPLIER = 1;
 	public bool healerSubclass;
 	public List<buffClass> buffs = new List<buffClass>();
 	public float healMultiplier = 1;
@@ -48,9 +50,15 @@ public class baseClass: MonoBehaviour {
 	public bool isSleeping = false;
 	public GameObject unit;
 	public GameObject HpText;
+	public int classNum;
+	public int buffNum = 1;
+	public classClass currClass;
+	public int[] expLevels = {80,165,267,387,523,677,850,1041,1252,1482,1733,2005,2298,2613,2950,3311,3696,4105,4539,4999,5485,5999,6540,7109,7708,8336,8994,9684,10405,11159,11946,12767,13623,14514,
+				15441,16405,17407,18447,19526,20646,21806,23007,24251,25538,26869,28245,29666,31134,32649,34212,35824,37486,39199,40963,42780,44650,46574,48554,50589,52682,54832,57041,59310,
+		61640,64032,66486,69004,71586,74234,76949,79731,82582,85503,88494,91557,94693,97903,101188,104548,107986};//made using (log(x)^4.5)/18
 
 	// Use this for initialization
-	public void create (string name, int[] stats, int role,int attackType, bool friendly) {
+	public void create (string name, int[] stats, int role,int attackType, bool friendly,int classNum) {
 		charName = name;
 		this.stats = stats;
 		this.role = role;
@@ -59,7 +67,11 @@ public class baseClass: MonoBehaviour {
 		maxHp = stats [2];
 		maxMana = stats [3];
 		baseStats = stats;
-		HpText.GetComponent<UnityEngine.UI.Text>().text = (maxHp + " / " + maxHp);
+		this.classNum = classNum;
+		if(HpText != null){
+			HpText.GetComponent<UnityEngine.UI.Text>().text = (maxHp + " / " + maxHp);
+			this.transform.FindChild ("HealthBarFront").GetComponent<SpriteRenderer> ().material.color = Color.green;//set health bar green
+		}
 	}
 	
 	// Update is called once per frame
@@ -154,7 +166,7 @@ public class baseClass: MonoBehaviour {
 				}
 				else if (role == 11)//support ally
 				{
-					//TODO do support stuff
+					supportBuff ();
 				}
 				else
 				{
@@ -183,13 +195,9 @@ public class baseClass: MonoBehaviour {
 				{
 					oneShot.attacked (this);
 				}
-				else if (role == 11)//support ally
-				{
-					//TODO do support stuff
-				}
 				else
 				{
-					manager.targetEnemy.attacked (this);
+					supportBuff ();
 				}
 			}
 		}
@@ -207,11 +215,14 @@ public class baseClass: MonoBehaviour {
 
 	public void iterateBuffs()
 	{
+		Queue<buffClass> removedBuffs = new Queue<buffClass>();
 		foreach (buffClass x in buffs)
 		{
 			if (x.tickBuff ())
-				buffs.Remove (x);
+				removedBuffs.Enqueue (x);
 		}
+		while(removedBuffs.Count > 0)
+			buffs.Remove (removedBuffs.Dequeue());
 	}
 
 	public void activateLifeSteal(bool buffed)
@@ -242,6 +253,8 @@ public class baseClass: MonoBehaviour {
 		if((rand >= (attacker.hitChance - dodgeChance)) && (attacker.attackType != 1) && (!isSleeping))//dodging, no dmg, can't dodge magic
 		{
 			Debug.Log (attackMsg + "attack was dodged ");
+			attacker.GetComponent<Animator> ().Play ("attacking",-1,0);
+			manager.printMiss ();
 			//TODO print dodge statement/animation
 			//no dmg done
 			return;
@@ -305,7 +318,6 @@ public class baseClass: MonoBehaviour {
 			else
 			{
 				manager.printDmg (dmg);
-				Debug.Log (stats [2]+" "+maxHp);
 				stats [2] -= dmg;
 				if(attacker.lifeSteal){
 					attacker.stats [2] += (int)(dmg * LIFE_STEAL_PERCENT);
@@ -318,13 +330,68 @@ public class baseClass: MonoBehaviour {
 		attacker.GetComponent<Animator> ().Play ("attacking",-1,0);
 		GetComponent<Animator> ().Play ("attacked",-1,0);
 		this.transform.FindChild ("HealthBarFront").transform.localScale = new Vector2 (((float)stats [2] / (float)maxHp) * 3.3333F, 3.3333F);
-		if (((float)stats [2] / (float)maxHp) > 0.66)
-			this.transform.FindChild ("HealthBarFront").GetComponent<SpriteRenderer> ().material.SetColor ("_SpecColor", Color.green);
-		else if (((float)stats [2] / (float)maxHp) <= 0.66)
-			this.transform.FindChild ("HealthBarFront").GetComponent<SpriteRenderer> ().material.SetColor ("_SpecColor", Color.yellow);
-		else
-			this.transform.FindChild ("HealthBarFront").GetComponent<SpriteRenderer> ().material.SetColor ("_SpecColor", Color.red);
+		if (((float)stats [2] / (float)maxHp) > 0.66f)
+			this.transform.FindChild ("HealthBarFront").GetComponent<SpriteRenderer> ().material.color = Color.green;
+		else if (((float)stats [2] / (float)maxHp) <= 0.66f)
+			this.transform.FindChild ("HealthBarFront").GetComponent<SpriteRenderer> ().material.color = Color.yellow;
+		if (((float)stats [2] / (float)maxHp) <= 0.33f)
+			this.transform.FindChild ("HealthBarFront").GetComponent<SpriteRenderer> ().material.color = Color.red;
 		HpText.GetComponent<UnityEngine.UI.Text>().text = stats[2] + " / " + maxHp;
 		Debug.Log (charName + " has " + stats [2] + " HP left, "+ attacker.charName +" did "+dmg+" dmg");
+	}
+
+	public void levelUp()//Stats increase on level up
+	{
+		stats [0]++;//level + 1
+		stats [1] = 0;//exp reset
+		//... do later
+	}
+
+	public void supportBuff()
+	{
+		switch (classNum) {
+		case(0):
+			{
+				break;
+			}
+		case(1):
+			{
+				foreach (allyClass x in manager.party) {
+					if (x == null)
+						continue;
+					Debug.Log ("applied buff to " + x.charName);
+					if (buffNum == 1) {
+						dmgBuff dmg = new dmgBuff ();
+						dmg.create (3, x, 10, false, false);
+						x.buffs.Add (dmg);
+						x.buffed = true;
+						dmg.oneTimeBuff ();
+					} else if (buffNum == 2) {
+						defBuff def = new defBuff ();
+						def.create (3, x, 10, false, false);
+						x.buffs.Add (def);
+						x.buffed = true;
+						def.oneTimeBuff ();
+					} else {
+						spdBuff spd = new spdBuff ();
+						spd.create (3, x, 10, false, false);
+						x.buffs.Add (spd);
+						x.buffed = true;
+						spd.oneTimeBuff ();
+					}
+				}
+				if (buffNum == 1) {
+					buffNum = 2;
+				} else if (buffNum == 2) {
+					buffNum = 3;
+				} else {
+					buffNum = 1;
+				}
+				break;
+			}
+		default:{
+				break;
+			}
+		}
 	}
 }

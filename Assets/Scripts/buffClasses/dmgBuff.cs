@@ -6,7 +6,7 @@ public class dmgBuff : buffClass {//buffs phys/magic dmg for user
 	int statChangeTwo;
 
 	// Use this for initialization
-	void create (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
+	public void create (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
 		base.create(duration,true, true,user,4,isBuffed,isDebuffed);
 		this.percentBoost = percentBoost;
 	}

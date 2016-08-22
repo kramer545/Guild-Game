@@ -5,7 +5,7 @@ public class spdBuff : buffClass {//buffs spd for user
 
 
 	// Use this for initialization
-	void create (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
+	public void create (int duration,baseClass user,double percentBoost,bool isBuffed,bool isDebuffed) {
 		base.create(duration,true, true,user,11,isBuffed,isDebuffed);
 		this.percentBoost = percentBoost;
 	}

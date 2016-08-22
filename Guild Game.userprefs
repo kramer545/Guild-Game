@@ -1,14 +1,16 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\baseClass.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Classes\classClass.cs">
     <Files>
-      <File FileName="Assets\Scripts\dungeonClasses\testDungeon.cs" Line="42" Column="30" />
-      <File FileName="Assets\Scripts\allyClass.cs" Line="9" Column="33" />
-      <File FileName="Assets\Scripts\baseClass.cs" Line="63" Column="78" />
+      <File FileName="Assets\Scripts\baseClass.cs" Line="7" Column="40" />
+      <File FileName="Assets\Scripts\allyClass.cs" Line="4" Column="37" />
+      <File FileName="Assets\Scripts\dungeonClasses\testDungeon.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\buffClasses\buffClass.cs" Line="15" Column="21" />
-      <File FileName="Assets\Scripts\BattleManager.cs" Line="439" Column="31" />
-      <File FileName="Assets\Scripts\enemyClass.cs" Line="6" Column="19" />
-      <File FileName="Assets\Scripts\dungeonClasses\baseDungeon.cs" Line="18" Column="9" />
+      <File FileName="Assets\Scripts\BattleManager.cs" Line="167" Column="10" />
+      <File FileName="Assets\Scripts\enemyClass.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Classes\classClass.cs" Line="54" Column="20" />
+      <File FileName="Assets\Scripts\Classes\Warrior.cs" Line="51" Column="1" />
+      <File FileName="Assets\Scripts\MenuScripts\MainMenu.cs" Line="24" Column="58" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

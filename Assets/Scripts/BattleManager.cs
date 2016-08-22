@@ -4,6 +4,8 @@ using System;
 
 public class BattleManager : MonoBehaviour  {
 
+	//public static BattleManager manager;
+
 	public baseClass[] party = new baseClass[5];
 	public baseClass[] enemys = new baseClass[5];
 	//split enemys into subsections for tactics
@@ -25,6 +27,7 @@ public class BattleManager : MonoBehaviour  {
 	public bool nextTurn;//used to create the next turn/units actions
 	bool battleOver;
 	public GameObject DmgText;
+	public orderVisual turnOrderVisual;
 
 	// Use this for initialization 
 	void Start(){
@@ -49,10 +52,12 @@ public class BattleManager : MonoBehaviour  {
 			nextTurn = false;
 			curUnit = turnOrder.Dequeue();
 			curUnit.action();
+			curUnit.iterateBuffs ();
 			if (turnOrder.Count < 8)
 			{
 				makeTurnOrder();
 			}
+			turnOrderVisual.GetComponent<Animator> ().Play ("turnOrder",-1,0);
 			StartCoroutine (turnWait());
 			//curUnit.action will set nextTurn to true when it is done(has art efffects/etc to do)
 		}
@@ -121,9 +126,12 @@ public class BattleManager : MonoBehaviour  {
 	void makeTurnOrder()
 	{
 		baseClass[] sameCT = new baseClass[party.Length + enemys.Length];
+		Queue <baseClass> tempOrder = new Queue<baseClass>();
+		baseClass temp = null;
 		int z = 0;
+		int y = 0;
+		turnOrderVisual.sprites = new Queue<Sprite> ();
 		while (turnOrder.Count < 8)
-			
 		{
 			foreach(baseClass x in party)
 			{
@@ -158,6 +166,20 @@ public class BattleManager : MonoBehaviour  {
 			}
 			z = 0;
 		}
+		Debug.Log ("Make Turn Order");
+		while(turnOrder.Count > 0)
+		{
+			temp = turnOrder.Dequeue ();
+			if(y < 9){
+				turnOrderVisual.units[y].GetComponent<SpriteRenderer>().sprite = temp.GetComponent<SpriteRenderer>().sprite;
+				y++;
+			}
+			else
+				turnOrderVisual.sprites.Enqueue (temp.GetComponent<SpriteRenderer> ().sprite);
+			tempOrder.Enqueue (temp);
+		}
+		while (tempOrder.Count > 0)
+			turnOrder.Enqueue (tempOrder.Dequeue ());
 	}
 
 	public class CTComparer : IComparer<baseClass>
@@ -278,6 +300,9 @@ public class BattleManager : MonoBehaviour  {
 		unit.stats [2] = 0;
 		int deadAllys = 0;
 		int deadEnemys = 0;
+		int y = 1;
+		turnOrderVisual.sprites = new Queue<Sprite> ();
+		turnOrderVisual.units[0].GetComponent<SpriteRenderer>().sprite = curUnit.GetComponent<SpriteRenderer>().sprite;//set first icon to curUnit as it is already removed from turnOrder
 		if(unit.friendly)
 		{
 			for(int x = 0;x<5;x++)
@@ -317,8 +342,17 @@ public class BattleManager : MonoBehaviour  {
 			if (tempUnit != unit)
 				tempOrder.Enqueue (tempUnit);
 		}
-		while (tempOrder.Count > 0)//move temp back to turnOrder, without unit if it was in there
-			turnOrder.Enqueue (tempOrder.Dequeue());
+		while (tempOrder.Count > 0) {
+			//move temp back to turnOrder, without unit if it was in there
+			baseClass tempUnit = tempOrder.Dequeue();
+			if(y < 9){
+				turnOrderVisual.units[y].GetComponent<SpriteRenderer>().sprite = tempUnit.GetComponent<SpriteRenderer>().sprite;
+				y++;
+			} else {
+				turnOrderVisual.sprites.Enqueue (tempUnit.GetComponent<SpriteRenderer> ().sprite);
+			}
+			turnOrder.Enqueue (tempUnit);
+		}
 		if (turnOrder.Count < 8)//increment turn order up to at least 8
 			makeTurnOrder ();
 		unit.onDeath ();
@@ -357,7 +391,7 @@ public class BattleManager : MonoBehaviour  {
 	public bool allyHealthCheck(baseClass healer,bool ally,int healPercent)
 	{
 		baseClass lowest = null;
-		int heal = (int)(healer.stats [7] * healer.HEALING_MULTIPLIER);
+		int heal = (int)(healer.stats [7] * baseClass.HEALING_MULTIPLIER);
 		if(ally)//player party
 		{
 			foreach(baseClass x in party)
@@ -375,11 +409,21 @@ public class BattleManager : MonoBehaviour  {
 					}
 				}
 			}
-			if (lowest != null) {
+			if (lowest != null) {//ally healed
 				Debug.Log (lowest.charName + " had " + lowest.stats [2] + " hp");
 				lowest.stats [2] += heal;
+				printHeal (heal);
+				healer.GetComponent<Animator> ().Play ("attacking",-1,0);
 				overHealCheck (lowest);
 				Debug.Log (healer.charName + " healed " + lowest.charName + " for " + heal);
+				lowest.transform.FindChild ("HealthBarFront").transform.localScale = new Vector2 (((float)lowest.stats [2] / (float)lowest.maxHp) * 3.3333F, 3.3333F);
+				if (((float)lowest.stats [2] / (float)lowest.maxHp) > 0.66)
+					lowest.transform.FindChild ("HealthBarFront").GetComponent<SpriteRenderer> ().material.SetColor ("_SpecColor", Color.green);
+				else if (((float)lowest.stats [2] / (float)lowest.maxHp) <= 0.66)
+					lowest.transform.FindChild ("HealthBarFront").GetComponent<SpriteRenderer> ().material.SetColor ("_SpecColor", Color.yellow);
+				else
+					lowest.transform.FindChild ("HealthBarFront").GetComponent<SpriteRenderer> ().material.SetColor ("_SpecColor", Color.red);
+				lowest.HpText.GetComponent<UnityEngine.UI.Text>().text = lowest.stats[2] + " / " + lowest.maxHp;
 				return true;
 			} else
 				return false;
@@ -467,6 +511,18 @@ public class BattleManager : MonoBehaviour  {
 	public void printDmg(int dmg)
 	{
 		DmgText.GetComponent<UnityEngine.UI.Text> ().text = "-"+dmg;
+		DmgText.GetComponent<Animator> ().Play ("dmgText",-1,0);
+	}
+
+	public void printHeal(int heal)
+	{
+		DmgText.GetComponent<UnityEngine.UI.Text> ().text = "+"+heal;
+		DmgText.GetComponent<Animator> ().Play ("healText",-1,0);
+	}
+
+	public void printMiss()
+	{
+		DmgText.GetComponent<UnityEngine.UI.Text> ().text = "Missed";
 		DmgText.GetComponent<Animator> ().Play ("dmgText",-1,0);
 	}
 
